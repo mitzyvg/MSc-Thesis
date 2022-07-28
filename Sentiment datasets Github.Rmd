@@ -1,0 +1,1920 @@
+---
+title: "Sentiment Datasets Github"
+output: html_document
+date: '2022-07-02'
+---
+
+
+```{r data upload}
+#bank_of_america <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/bankofamerica copy.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#coca_cola <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/coca_cola_life.csv")
+
+#ford <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/ford.csv")
+
+#sachs <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/goldmansachs.csv")
+
+#mcdonalds <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/mcdonalds.csv")
+
+microsoft <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft.csv")
+
+microsoft_green <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft_green.csv")
+
+#nike <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike.csv")
+
+#nike1 <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike1.csv")
+
+#proctergamble  <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/proctergamble.csv")
+
+#shell <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/shell.csv")
+
+#tesla <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/tesla.csv")
+```
+
+```{r filter data}
+#bank_of_america <- bank_of_america[,names(bank_of_america) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count", #"username", "id")]
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[,names(boeing) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#coca_cola <- coca_cola[,names(coca_cola) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#ford <- ford[,names(ford) %in% c("date", "time", "tweet", "language", "likes_count",
+#                                "retweets_count")]
+#mcdonalds <- mcdonalds[,names(mcdonalds) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+microsoft <- microsoft[,names(microsoft) %in% c("date", "time", "tweet", 
+                                                                "language", "likes_count", "retweets_count")]
+microsoft_green <- microsoft_green[,names(microsoft_green) %in% c("date", "time", "tweet", 
+                                                                 "language", "likes_count", "retweets_count")]
+#nike <-  nike[,names(nike) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#nike1 <- nike1[,names(nike1) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#proctergamble <- proctergamble[,names(proctergamble) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#sachs <- sachs[,names(sachs) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+#shell <- shell[,names(shell) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+#tesla <- tesla[,names(tesla) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+```
+
+```{r language}
+microsoft <- rbind(microsoft, microsoft_green)
+#nike <- rbind(nike1, nike)
+remove(microsoft_green, nike1)
+
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[boeing$language =='en' | boeing$language =='qme' | boeing$language =='und',]
+#coca_cola <- coca_cola[coca_cola$language =='en' | coca_cola$language =='qme' | coca_cola$language =='und',]
+#ford <- ford[ford$language =='en' | ford$language =='qme' | ford$language =='und',]
+#mcdonalds <- mcdonalds[mcdonalds$language =='en' | mcdonalds$language =='qme' | mcdonalds$language =='und',]
+microsoft <- microsoft[microsoft$language =='en' | microsoft$language =='qme' | microsoft$language =='und',]
+#nike <- nike[nike$language =='en' | nike$language =='qme' | nike$language =='und',]
+#proctergamble <- proctergamble[proctergamble$language =='en' | proctergamble$language =='qme' | proctergamble$language =='und',]
+#sachs <- sachs[sachs$language =='en' | sachs$language =='qme' | sachs$language =='und',]
+#shell <- shell[shell$language =='en' | shell$language =='qme' | shell$language =='und',]
+#tesla <- tesla[tesla$language =='en' | tesla$language =='qme' | tesla$language =='und',]
+```
+
+```{r number of words for each dataframe, eval=FALSE, include=FALSE}
+#cut text into words by splitting on spaces and punctuation
+review_words <- microsoft %>% unnest_tokens(word,tweet,to_lower=FALSE) 
+print("number of words")
+nrow(review_words)
+review_words <- review_words[,6]
+
+#Count the number of times each word occurs
+counts <- count(review_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts)
+```
+
+```{r microsoft data cleaning}
+n.tweet <- length(microsoft$tweet)
+# Convert to basic ASCII text to avoid silly characters
+microsoft$tweet_clean <- iconv(microsoft$tweet, to = "ASCII", sub = " ")  
+
+clean.text1 <- function(x)
+{
+  # convert to lower case
+  x = tolower(x)
+  x = gsub("\\bcan't\\b", "can not", x)
+  x = gsub("\\bdon't\\b", "do not", x)
+  x = gsub("\\bdoesn't\\b", "does not", x)
+  x = gsub("\\bi've\\b", 'i have', x)
+  x = gsub("\\bi'll\\b", 'i will', x)
+  x = gsub("\\bdon't\\b", 'do not', x)
+   x = gsub("\\bi 'm\\b", 'i am', x)
+    x = gsub("\\bit's\\b", 'it has', x)
+  x = gsub("\\byou'll\\b", 'you will',x)
+  x = gsub("\\bdidn't\\b", 'did not', x)
+   x = gsub("http://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  x = gsub("https://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  # remove at
+  x = gsub("@\\w+", " ", x)
+  # remove punctuation
+  #x = gsub("[[:punct:]]", " ", x)
+  # remove numbers
+  x = gsub("[[:digit:]]", " ", x)
+  # remove rt
+  x = gsub("RT @[a-z,A-Z]*: "," ",x)
+  #x = gsub("#[a-z,A-Z]*", " ", x)
+  x = gsub("#", "", x)
+  x = gsub("@[a-z,A-Z]*", " ", x)
+  # remove tabs
+  x = gsub("[ |\t]{2,}", " ", x)
+  # remove blank spaces at the beginning
+  x = gsub("^ ", " ", x)
+  # remove blank spaces at the end
+  x = gsub(" $", " ", x)
+  x = gsub('[^[:graph:]]', ' ',x)
+  x = gsub('[[:cntrl:]]', ' ', x)
+  x = gsub('\\d+', ' ', x)
+  x = str_replace_all(x,"[^[:graph:]]", " ")
+   x = gsub('&amp', ' ', x)
+  return(x)
+}
+```
+
+```{r microsoft}
+#################Bank of America####################
+microsoft$tweet_clean <- clean.text1(microsoft$tweet_clean)
+idx <- which(microsoft$tweet_clean == "")
+microsoft <- microsoft[microsoft$tweet_clean != " ",]
+microsoft$date <- as.Date(microsoft$date)
+
+```
+
+```{r microsoft number of word clean dataframe}
+#cut text into words by splitting on spaces and punctuation
+microsoft_words <- microsoft %>% unnest_tokens(word,tweet_clean,to_lower=FALSE) 
+print("number of words")
+nrow(microsoft_words)
+
+#Count the number of times each word occurs
+counts_microsoft <- count(microsoft_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts_microsoft)
+```
+
+```{r microsoft count without stop words, eval=FALSE, include=FALSE}
+data(stop_words)
+microsoft_words_nostop <- microsoft_words %>% 
+                        anti_join(stop_words)
+counts <- count(microsoft_words_nostop$word)
+print("number of words without stop words")
+sum(counts$freq)
+print("number of unique words")
+nrow(counts)
+```
+
+```{r microsoft getting an update on the most frequent words after removing stop words, eval=FALSE, include=FALSE}
+counts %>% 
+  mutate(x = reorder(x,freq)) %>% 
+  top_n(20, x) %>%
+  ggplot(aes(x,freq)) +  
+  geom_col() + 
+  labs(x = NULL, y = "Number of occurences") + 
+  coord_flip() + 
+  theme(text = element_text(size = 17)) + 
+  ggtitle("Word Frequency Histogram")
+```
+
+```{r microsoft creating sentiment dataset for words, eval=FALSE, include=FALSE}
+microsoft_words <- microsoft[,] %>%
+  unnest_tokens("tweet_no_stem", output = "word") %>%
+anti_join(stop_words, by = "word") %>%
+  count("word")%>%
+  filter(freq > 100)
+
+microsoft_words$sentiment <- sentiment(microsoft_words$word , lexicon::hash_sentiment_huliu)$sentiment
+microsoft_words <- filter(microsoft_words, sentiment !=0)
+
+
+microsoft_words %>%
+  mutate(freq = ifelse(sentiment <0, -freq, freq))%>%
+  mutate(word=reorder(word,freq))%>%
+  mutate(Sentiment = ifelse(sentiment > 0, "Positive", "Negative"))%>%
+  ggplot(aes(word, freq, fill= Sentiment)) + geom_col() + coord_flip() + labs(y="Contribution to \"total\" sentiment", x= "Word")
+```
+
+```{r}
+microsoft$tweet_no_stem <- microsoft$tweet_clean
+microsoft$tweet_clean = gsub("[[:punct:]]", " ", microsoft$tweet_clean)
+
+ignorelist = stop_words %>% filter(!word %in% c("no", "not", "never"))
+                                                
+for (j in 1:nrow(microsoft)) {
+  words <- microsoft[j,] %>% 
+           unnest_tokens(word, tweet_no_stem) %>% 
+           anti_join(ignorelist, by="word")
+  microsoft[j, "tweet_with_no"] <- paste(words[, "word"], collapse = " ")}
+```
+
+```{r sentiment score microsoft}
+
+microsoft <- microsoft[-c(which(str_detect(microsoft$tweet_no_stem, "giveaway"))),]
+microsoft <- microsoft[-c(which(str_detect(microsoft$tweet_no_stem, "win"))),]
+microsoft <- microsoft[-c(which(str_detect(microsoft$tweet_no_stem, "xbox"))),]
+
+mytext1 <- get_sentences(microsoft$tweet_with_no)
+
+microsoft$sent_tweet_nostop <- sentiment_by(mytext1)$ave_sentiment
+#mysentiment <- sentiment_by(mytext, question.weight = 0)
+microsoft_plot <- setNames(aggregate(microsoft[,c('sent_tweet_withstop', "sent_tweet_nostop")], by = list(microsoft$date),FUN = mean),c("date", "sentiment_stop", "sentiment_no_stop"))
+
+microsoft_subset <- microsoft_plot[(microsoft_plot$date > "2020-02-04")&(microsoft_plot$date < "2020-03-05"), ]
+
+microsoft_subset$day <- c(1:29)
+
+microsoft_subset %>%
+  ggplot(aes(x = day, y = sentiment_no_stop)) +
+  #geom_line() +
+  geom_smooth(span = 0.3, se = FALSE, color = 'pink')+
+  scale_x_continuous(breaks = (c(1,15,29)),
+                   labels = c("2 weeks prior", "day of tweet", "2 weeks after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 1) +
+  xlab(label = 'Date') +
+  ylab(label = "Sentiment Score") +
+  theme_bw() +
+  ggtitle(label = 'Sentiment Score')
+
+remove(microsoft_plot)
+
+```
+
+```{r Microsoft making subsets and saving the data }
+before_microsoft <- microsoft_subset[1:14,]
+after_microsoft <- microsoft_subset[15:28,]
+
+t.test(before_microsoft$sentiment_no_stop, after_microsoft$sentiment_no_stop)
+
+microsoft_subset <- microsoft_subset[,c("day", "sentiment_no_stop")]
+names(microsoft_subset)[2] <- 'sentiment_microsoft'
+saveRDS(microsoft_subset , file="sentiment_subset_microsoft.rds")
+```
+
+```{r coca cola data upload}
+#bank_of_america <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/bankofamerica copy.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+coca_cola <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/coca_cola_life.csv")
+
+#ford <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/ford.csv")
+
+#sachs <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/goldmansachs.csv")
+
+#mcdonalds <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/mcdonalds.csv")
+
+#microsoft <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft.csv")
+
+#microsoft_green <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft_green.csv")
+
+#nike <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike.csv")
+
+#nike1 <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike1.csv")
+
+#proctergamble  <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/proctergamble.csv")
+
+#shell <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/shell.csv")
+
+#tesla <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/tesla.csv")
+```
+
+```{r coca cola filter data}
+#bank_of_america <- bank_of_america[,names(bank_of_america) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count", #"username", "id")]
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[,names(boeing) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+coca_cola <- coca_cola[,names(coca_cola) %in% c("date", "time", "tweet", 
+                                                                 "language", "likes_count", "retweets_count")]
+#ford <- ford[,names(ford) %in% c("date", "time", "tweet", "language", "likes_count",
+#                                "retweets_count")]
+#mcdonalds <- mcdonalds[,names(mcdonalds) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+#microsoft <- microsoft[,names(microsoft) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+#microsoft_green <- microsoft_green[,names(microsoft_green) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#nike <-  nike[,names(nike) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#nike1 <- nike1[,names(nike1) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#proctergamble <- proctergamble[,names(proctergamble) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#sachs <- sachs[,names(sachs) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+#shell <- shell[,names(shell) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+#tesla <- tesla[,names(tesla) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+```
+
+```{r coca cola language}
+#microsoft <- rbind(microsoft, microsoft_green)
+#nike <- rbind(nike1, nike)
+#remove(microsoft_green, nike1)
+
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[boeing$language =='en' | boeing$language =='qme' | boeing$language =='und',]
+coca_cola <- coca_cola[coca_cola$language =='en' | coca_cola$language =='qme' | coca_cola$language =='und',]
+#ford <- ford[ford$language =='en' | ford$language =='qme' | ford$language =='und',]
+#mcdonalds <- mcdonalds[mcdonalds$language =='en' | mcdonalds$language =='qme' | mcdonalds$language =='und',]
+#microsoft <- microsoft[microsoft$language =='en' | microsoft$language =='qme' | microsoft$language =='und',]
+#nike <- nike[nike$language =='en' | nike$language =='qme' | nike$language =='und',]
+#proctergamble <- proctergamble[proctergamble$language =='en' | proctergamble$language =='qme' | proctergamble$language =='und',]
+#sachs <- sachs[sachs$language =='en' | sachs$language =='qme' | sachs$language =='und',]
+#shell <- shell[shell$language =='en' | shell$language =='qme' | shell$language =='und',]
+#tesla <- tesla[tesla$language =='en' | tesla$language =='qme' | tesla$language =='und',]
+```
+
+```{r number of words for each dataframe, eval=FALSE, include=FALSE}
+#cut text into words by splitting on spaces and punctuation
+review_words <- coca_cola %>% unnest_tokens(word,tweet,to_lower=FALSE) 
+print("number of words")
+nrow(review_words)
+review_words <- review_words[,6]
+
+#Count the number of times each word occurs
+counts <- count(review_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts)
+```
+
+```{r coca cola data cleaning}
+n.tweet <- length(coca_cola$tweet)
+# Convert to basic ASCII text to avoid silly characters
+coca_cola$tweet_clean <- iconv(coca_cola$tweet, to = "ASCII", sub = " ")  
+
+clean.text1 <- function(x)
+{
+  # convert to lower case
+  x = tolower(x)
+  x = gsub("\\bcan't\\b", "can not", x)
+  x = gsub("\\bdon't\\b", "do not", x)
+  x = gsub("\\bdoesn't\\b", "does not", x)
+  x = gsub("\\bi've\\b", 'i have', x)
+  x = gsub("\\bi'll\\b", 'i will', x)
+  x = gsub("\\bdon't\\b", 'do not', x)
+   x = gsub("\\bi 'm\\b", 'i am', x)
+    x = gsub("\\bit's\\b", 'it has', x)
+  x = gsub("\\byou'll\\b", 'you will',x)
+  x = gsub("\\bdidn't\\b", 'did not', x)
+   x = gsub("http://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  x = gsub("https://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  # remove at
+  x = gsub("@\\w+", " ", x)
+  # remove punctuation
+  #x = gsub("[[:punct:]]", " ", x)
+  # remove numbers
+  x = gsub("[[:digit:]]", " ", x)
+  # remove rt
+  x = gsub("RT @[a-z,A-Z]*: "," ",x)
+  #x = gsub("#[a-z,A-Z]*", " ", x)
+  x = gsub("#", "", x)
+  x = gsub("@[a-z,A-Z]*", " ", x)
+  # remove tabs
+  x = gsub("[ |\t]{2,}", " ", x)
+  # remove blank spaces at the beginning
+  x = gsub("^ ", " ", x)
+  # remove blank spaces at the end
+  x = gsub(" $", " ", x)
+  x = gsub('[^[:graph:]]', ' ',x)
+  x = gsub('[[:cntrl:]]', ' ', x)
+  x = gsub('\\d+', ' ', x)
+  x = str_replace_all(x,"[^[:graph:]]", " ")
+   x = gsub('&amp', ' ', x)
+  return(x)
+}
+```
+
+```{r coca cola}
+#################Bank of America####################
+coca_cola$tweet_clean <- clean.text1(coca_cola$tweet_clean)
+idx <- which(coca_cola$tweet_clean == "")
+coca_cola <- coca_cola[coca_cola$tweet_clean != " ",]
+coca_cola$date_time <- paste(coca_cola$date, coca_cola$time, sep= " ")
+
+##Create new variable for year and time
+coca_cola %<>% 
+  mutate(created = date_time %>% 
+      # Remove zeros.
+      str_remove_all(pattern = '\\+0000') %>%
+      # Parse date.
+      parse_date_time(orders = '%y-%m-%d %H%M%S'))
+coca_cola %<>% 
+  mutate(Created_At_Round = created%>% round(units = 'hours') %>% as.POSIXct())
+coca_cola <- coca_cola[, ! names(coca_cola) %in% c("created", "language", "time")]
+#bank_of_america %>% pull(created) %>% min()  #get time for first tweet
+coca_cola$date <- as.Date(coca_cola$date)
+
+plt <- coca_cola %>% 
+  dplyr::count(Created_At_Round) %>% 
+  ggplot(mapping = aes(x = Created_At_Round, y = n)) +
+  theme_light() +
+  geom_line() +
+  xlab(label = 'Date') +
+  ylab(label = NULL) +
+  ggtitle(label = 'Number of Tweets per Hour')
+
+#plt %>% ggplotly()
+```
+
+```{r coca cola number of word clean dataframe}
+#cut text into words by splitting on spaces and punctuation
+coca_cola_words <- coca_cola %>% unnest_tokens(word,tweet_clean,to_lower=FALSE) 
+print("number of words")
+nrow(coca_cola_words)
+
+#Count the number of times each word occurs
+counts_coca_cola <- count(coca_cola_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts_coca_cola)
+```
+
+```{r coca cola count without stop words, eval=FALSE, include=FALSE}
+data(stop_words)
+coca_cola_words_nostop <- coca_cola_words %>% 
+                        anti_join(stop_words)
+counts <- count(coca_cola_words_nostop$word)
+print("number of words without stop words")
+sum(counts$freq)
+print("number of unique words")
+nrow(counts)
+```
+
+```{r coca cola getting an update on the most frequent words after removing stop words, eval=FALSE, include=FALSE}
+counts %>% 
+  mutate(x = reorder(x,freq)) %>% 
+  top_n(20, x) %>%
+  ggplot(aes(x,freq)) +  
+  geom_col() + 
+  labs(x = NULL, y = "Number of occurences") + 
+  coord_flip() + 
+  theme(text = element_text(size = 17)) + 
+  ggtitle("Word Frequency Histogram")
+```
+
+```{r coca cola creating sentiment dataset for words, include=FALSE}
+coca_cola$tweet_no_stem <- coca_cola$tweet_clean
+
+coca_cola_words <- coca_cola[,] %>%
+  unnest_tokens("tweet_no_stem", output = "word") %>%
+  anti_join(stop_words, by = "word") %>%
+  count("word")%>%
+  filter(freq > 100)
+
+coca_cola_words$sentiment <- sentiment(coca_cola_words$word , lexicon::hash_sentiment_huliu)$sentiment
+coca_cola_words <- filter(coca_cola_words, sentiment !=0)
+
+
+coca_cola_words %>%
+  mutate(freq = ifelse(sentiment <0, -freq, freq))%>%
+  mutate(word=reorder(word,freq))%>%
+  mutate(Sentiment = ifelse(sentiment > 0, "Positive", "Negative"))%>%
+  ggplot(aes(word, freq, fill= Sentiment)) + geom_col() + coord_flip() + labs(y="Contribution to \"total\" sentiment", x= "Word")
+```
+
+```{r}
+coca_cola$tweet_clean = gsub("[[:punct:]]", " ", coca_cola$tweet_clean)
+
+ignorelist = stop_words %>% filter(!word %in% c("no", "not", "never"))
+                                                
+for (j in 1:nrow(coca_cola)) {
+  
+  words <- coca_cola[j,] %>% 
+           unnest_tokens(word, tweet_clean) %>% 
+           anti_join(ignorelist, by="word")
+  coca_cola[j, "tweet_with_no"] <- paste(words[, "word"], collapse = " ")}
+
+```
+
+```{r coca cola sentiment }
+coca_cola <- coca_cola[-c(which(str_detect(coca_cola$tweet_no_stem, "giveaway"))),]
+coca_cola <- coca_cola[-c(which(str_detect(coca_cola$tweet_no_stem, "win"))),]
+
+mytext <- get_sentences(coca_cola$tweet_with_no)
+coca_cola$sent_sentimentr <- sentiment_by(mytext)$ave_sentiment
+coca_cola_plot <- setNames(aggregate(coca_cola[,c('sent_sentimentr')], by = list(coca_cola$date),FUN = mean),c("date", "sentiment"))
+
+coca_cola_subset <- coca_cola_plot[(coca_cola_plot$date > "2014-08-16")&(coca_cola_plot$date < "2014-09-15"), ]
+
+coca_cola_subset$day <- c(1:29)
+
+coca_cola_subset %>%
+  ggplot(aes(x = day, y = sentiment)) +
+  #geom_line() +
+  geom_smooth(span = 0.3, se = FALSE, color = 'pink')+
+  scale_x_continuous(breaks = (c(1,15,29)),
+                   labels = c("2 weeks prior", "day of tweet", "2 weeks after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 1) +
+  xlab(label = 'Date') +
+  ylab(label = "Sentiment Score") +
+  theme_bw() +
+  ggtitle(label = 'Sentiment Score')
+
+remove(coca_cola_plot)
+
+```
+
+```{r coca cola subsetting}
+coca_cola_subset <- coca_cola_subset[, c("day", "sentiment")]
+names(coca_cola_subset)[2] <- 'sentiment_coca_cola'
+
+before_coca_cola <- coca_cola_subset[1:14,]
+after_coca_cola <- coca_cola_subset[15:28,]
+coca_cola_test <- t.test(before_coca_cola$sentiment_coca_cola, after_coca_cola$sentiment_coca_cola)
+
+saveRDS(coca_cola_subset , file="sentiment_subset_coca_cola.rds")
+```
+
+
+```{r Shell data upload}
+#bank_of_america <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/bankofamerica copy.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#coca_cola <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/coca_cola_life.csv")
+
+#ford <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/ford.csv")
+
+#sachs <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/goldmansachs.csv")
+
+#mcdonalds <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/mcdonalds.csv")
+
+#microsoft <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft.csv")
+
+#microsoft_green <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft_green.csv")
+
+#nike <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike.csv")
+
+#nike1 <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike1.csv")
+
+#proctergamble  <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/proctergamble.csv")
+
+shell <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/shell.csv")
+
+#tesla <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/tesla.csv")
+```
+
+```{r filter data}
+#bank_of_america <- bank_of_america[,names(bank_of_america) %in% c("date", "time", "tweet", 
+ #                                                                "language", "likes_count", "retweets_count")]
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[,names(boeing) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#coca_cola <- coca_cola[,names(coca_cola) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#ford <- ford[,names(ford) %in% c("date", "time", "tweet", "language", "likes_count",
+#                                "retweets_count")]
+#mcdonalds <- mcdonalds[,names(mcdonalds) %in% c("date", "time", "tweet", 
+#                                                                  "language", "likes_count", "retweets_count")]
+#microsoft <- microsoft[,names(microsoft) %in% c("date", "time", "tweet", 
+#                                                                "language", "likes_count", "retweets_count")]
+#microsoft_green <- microsoft_green[,names(microsoft_green) %in% c("date", "time", "tweet", 
+ #                                                                "language", "likes_count", "retweets_count")]
+#nike <-  nike[,names(nike) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#nike1 <- nike1[,names(nike1) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#proctergamble <- proctergamble[,names(proctergamble) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#sachs <- sachs[,names(sachs) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+shell <- shell[,names(shell) %in% c("date", "time", "tweet", 
+                                                                "language", "likes_count", "retweets_count")]
+#tesla <- tesla[,names(tesla) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+```
+
+```{r Shell language}
+#microsoft <- rbind(microsoft, microsoft_green)
+#nike <- rbind(nike1, nike)
+#remove(microsoft_green, nike1)
+
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[boeing$language =='en' | boeing$language =='qme' | boeing$language =='und',]
+#coca_cola <- coca_cola[coca_cola$language =='en' | coca_cola$language =='qme' | coca_cola$language =='und',]
+#ford <- ford[ford$language =='en' | ford$language =='qme' | ford$language =='und',]
+# <- mcdonalds[mcdonalds$language =='en' | mcdonalds$language =='qme' | mcdonalds$language =='und',]
+#microsoft <- microsoft[microsoft$language =='en' | microsoft$language =='qme' | microsoft$language =='und',]
+#nike <- nike[nike$language =='en' | nike$language =='qme' | nike$language =='und',]
+#proctergamble <- proctergamble[proctergamble$language =='en' | proctergamble$language =='qme' | proctergamble$language =='und',]
+#sachs <- sachs[sachs$language =='en' | sachs$language =='qme' | sachs$language =='und',]
+shell <- shell[shell$language =='en' | shell$language =='qme' | shell$language =='und',]
+#tesla <- tesla[tesla$language =='en' | tesla$language =='qme' | tesla$language =='und',]
+```
+
+```{r shell set date}
+shell$date <- as.Date(shell$date)
+shell <- shell[(shell$date >= "2020-10-19")&(shell$date <= "2020-11-16"), ]
+
+```
+
+
+```{r shell number of words for each dataframe, eval=FALSE, include=FALSE}
+#cut text into words by splitting on spaces and punctuation
+review_words <- shell %>% unnest_tokens(word,tweet,to_lower=FALSE) 
+print("number of words")
+nrow(review_words)
+review_words <- review_words[,6]
+
+#Count the number of times each word occurs
+counts <- count(review_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts)
+```
+
+```{r Shell data cleaning}
+n.tweet <- length(shell$tweet)
+# Convert to basic ASCII text to avoid silly characters
+shell$tweet_clean <- iconv(shell$tweet, to = "ASCII", sub = " ")  
+shell$tweet_clean <- tolower(shell$tweet_clean)
+
+clean.text1 <- function(x)
+{
+  # convert to lower case
+  x = tolower(x)
+  x = gsub("\\bcan't\\b", "can not", x)
+  x = gsub("\\bdon't\\b", "do not", x)
+  x = gsub("\\bdoesn't\\b", "does not", x)
+  x = gsub("\\bi've\\b", 'i have', x)
+  x = gsub("\\bi'll\\b", 'i will', x)
+  x = gsub("\\bdon't\\b", 'do not', x)
+   x = gsub("\\bi 'm\\b", 'i am', x)
+    x = gsub("\\bit's\\b", 'it has', x)
+  x = gsub("\\byou'll\\b", 'you will',x)
+  x = gsub("\\bdidn't\\b", 'did not', x)
+   x = gsub("http://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  x = gsub("https://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  # remove at
+  x = gsub("@\\w+", " ", x)
+  # remove punctuation
+  #x = gsub("[[:punct:]]", " ", x)
+  # remove numbers
+  x = gsub("[[:digit:]]", " ", x)
+  # remove rt
+  x = gsub("RT @[a-z,A-Z]*: "," ",x)
+  #x = gsub("#[a-z,A-Z]*", " ", x)
+  x = gsub("#", "", x)
+  x = gsub("@[a-z,A-Z]*", " ", x)
+  # remove tabs
+  x = gsub("[ |\t]{2,}", " ", x)
+  # remove blank spaces at the beginning
+  x = gsub("^ ", " ", x)
+  # remove blank spaces at the end
+  x = gsub(" $", " ", x)
+  x = gsub('[^[:graph:]]', ' ',x)
+  x = gsub('[[:cntrl:]]', ' ', x)
+  x = gsub('\\d+', ' ', x)
+  x = str_replace_all(x,"[^[:graph:]]", " ")
+   x = gsub('&amp', ' ', x)
+  return(x)
+}
+```
+
+```{r Shell}
+#################Shell####################
+shell$tweet_clean <- clean.text1(shell$tweet_clean)
+shell$tweet_clean <- gsub('don t', 'do not', shell$tweet_clean)
+shell$tweet_clean <- gsub('wouldn t', 'would not', shell$tweet_clean)
+shell$tweet_clean <- gsub('hasn t', 'has not', shell$tweet_clean)
+shell$tweet_clean <- gsub('doesn t', 'does not', shell$tweet_clean)
+shell$tweet_clean <- gsub('stopshell', 'stop shell', shell$tweet_clean)
+
+idx <- which(shell$tweet_clean == "")
+shell <- shell[shell$tweet_clean != " ",]
+shell$date <- as.Date(shell$date)
+
+```
+
+```{r Shell number of word clean dataframe}
+#cut text into words by splitting on spaces and punctuation
+shell_words <- shell %>% unnest_tokens(word,tweet_clean,to_lower=FALSE) 
+print("number of words")
+nrow(shell_words)
+
+#Count the number of times each word occurs
+counts_shell <- count(shell_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts_shell)
+```
+
+```{r Shell count without stop words, eval=FALSE, include=FALSE}
+data(stop_words)
+shell_words_nostop <- shell_words %>% 
+                        anti_join(stop_words)
+counts <- count(shell_words_nostop$word)
+print("number of words without stop words")
+sum(counts$freq)
+print("number of unique words")
+nrow(counts)
+```
+
+```{r Shell getting an update on the most frequent words after removing stop words, eval=FALSE, include=FALSE}
+counts %>% 
+  mutate(x = reorder(x,freq)) %>% 
+  top_n(20, x) %>%
+  ggplot(aes(x,freq)) +  
+  geom_col() + 
+  labs(x = NULL, y = "Number of occurences") + 
+  coord_flip() + 
+  theme(text = element_text(size = 17)) + 
+  ggtitle("Word Frequency Histogram")
+```
+
+```{r Shell creating sentiment dataset for words, eval=FALSE, include=FALSE}
+shell_words <- shell[,] %>%
+  unnest_tokens("tweet_no_stem", output = "word") %>%
+anti_join(stop_words, by = "word") %>%
+  count("word")%>%
+  filter(freq > 100)
+
+shell_words$sentiment <- sentiment(shell_words$word , lexicon::hash_sentiment_huliu)$sentiment
+shell_words <- filter(shell_words, sentiment !=0)
+
+shell_words %>%
+  mutate(freq = ifelse(sentiment <0, -freq, freq))%>%
+  mutate(word=reorder(word,freq))%>%
+  mutate(Sentiment = ifelse(sentiment > 0, "Positive", "Negative"))%>%
+  ggplot(aes(word, freq, fill= Sentiment)) + geom_col() + coord_flip() + labs(y="Contribution to \"total\" sentiment", x= "Word")
+```
+
+```{r Shell}
+shell$tweet_no_stem <- shell$tweet_clean
+shell$tweet_clean = gsub("[[:punct:]]", " ", shell$tweet_clean)
+
+ignorelist = stop_words %>% filter(!word %in% c("no", "not", "never", "nobody", "none", "cannot", "can't"
+                                                , "can", "do", "would", "ever", "except", "ignored", "least"
+                                                , "more", 'non', "none", "nor", "nowhere", "unfortunately", 
+                                                "unlikely", "unless", "useful", "very"))
+                                                
+for (j in 1:nrow(shell)) {
+  words <- shell[j,] %>% 
+           unnest_tokens(word, tweet_no_stem) %>% 
+           anti_join(ignorelist, by="word")
+  shell[j, "tweet_with_no"] <- paste(words[, "word"], collapse = " ")}
+```
+
+```{r sentiment Shell}
+
+shell <- shell[-c(which(str_detect(shell$tweet_no_stem, "giveaway"))),]
+shell <- shell[-c(which(str_detect(shell$tweet_no_stem, "win"))),]
+shell <- shell[-c(which(str_detect(shell$tweet_no_stem, "podcast"))),]
+
+mytext1 <- get_sentences(shell$tweet_with_no)
+shell$sent_tweet_nostop <- sentiment_by(mytext1)$ave_sentiment
+#mysentiment <- sentiment_by(mytext, question.weight = 0)
+shell_plot <- setNames(aggregate(shell[,c('sent_tweet_withstop', "sent_tweet_nostop")], by = list(shell$date),FUN = mean),c("date", "sentiment_stop", "sentiment_no_stop"))
+
+shell_subset <- shell_plot
+shell_subset$day <- c(1:29)
+
+shell_subset %>%
+  ggplot(aes(x = day, y = sentiment_stop)) +
+  geom_line() +
+  geom_smooth(span = 0.2, se = FALSE, color = 'pink')+
+  scale_x_continuous(breaks = (c(1,15,29)),
+                   labels = c("2 weeks prior", "day of tweet", "2 weeks after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 1) +
+  xlab(label = 'Date') +
+  ylab(label = "Sentiment Score") +
+  theme_bw() +
+  ggtitle(label = 'Sentiment Score')
+
+remove(shell_plot)
+
+```
+
+```{r shell subsetting}
+before_shell <- shell_subset[12:14,]
+after_shell <- shell_subset[16:18,]
+
+t.test(before_shell$sentiment_no_stop, after_shell$sentiment_no_stop)
+```
+ 
+```{r Shell save data}
+shell_subset <- shell_subset[,c("day", "sentiment_no_stop")]
+names(shell_subset)[2] <- 'sentiment_shell'
+saveRDS(shell_subset , file="sentiment_subset_shell.rds")
+```
+
+
+```{r NIKE data upload}
+#bank_of_america <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/bankofamerica copy.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#coca_cola <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/coca_cola_life.csv")
+
+#ford <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/ford.csv")
+
+#sachs <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/goldmansachs.csv")
+
+#mcdonalds <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/mcdonalds.csv")
+
+#microsoft <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft.csv")
+
+#microsoft_green <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft_green.csv")
+
+nike <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike.csv")
+
+nike1 <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike1.csv")
+
+#proctergamble  <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/proctergamble.csv")
+
+#shell <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/shell.csv")
+
+#tesla <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/tesla.csv")
+```
+
+```{r filter data}
+#bank_of_america <- bank_of_america[,names(bank_of_america) %in% c("date", "time", "tweet", 
+ #                                                                "language", "likes_count", "retweets_count")]
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[,names(boeing) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#coca_cola <- coca_cola[,names(coca_cola) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#ford <- ford[,names(ford) %in% c("date", "time", "tweet", "language", "likes_count",
+#                                "retweets_count")]
+#mcdonalds <- mcdonalds[,names(mcdonalds) %in% c("date", "time", "tweet", 
+#                                                                  "language", "likes_count", "retweets_count")]
+#microsoft <- microsoft[,names(microsoft) %in% c("date", "time", "tweet", 
+#                                                                "language", "likes_count", "retweets_count")]
+#microsoft_green <- microsoft_green[,names(microsoft_green) %in% c("date", "time", "tweet", 
+ #                                                                "language", "likes_count", "retweets_count")]
+nike <-  nike[,names(nike) %in% c("date", "time", "tweet", 
+                                                                 "language", "likes_count", "retweets_count")]
+nike1 <- nike1[,names(nike1) %in% c("date", "time", "tweet", 
+                                                                 "language", "likes_count", "retweets_count")]
+#proctergamble <- proctergamble[,names(proctergamble) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#sachs <- sachs[,names(sachs) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+#shell <- shell[,names(shell) %in% c("date", "time", "tweet", 
+#                                                                "language", "likes_count", "retweets_count")]
+#tesla <- tesla[,names(tesla) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+```
+
+```{r language}
+#microsoft <- rbind(microsoft, microsoft_green)
+nike <- rbind(nike1, nike)
+remove(nike1)
+
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[boeing$language =='en' | boeing$language =='qme' | boeing$language =='und',]
+#coca_cola <- coca_cola[coca_cola$language =='en' | coca_cola$language =='qme' | coca_cola$language =='und',]
+#ford <- ford[ford$language =='en' | ford$language =='qme' | ford$language =='und',]
+# <- mcdonalds[mcdonalds$language =='en' | mcdonalds$language =='qme' | mcdonalds$language =='und',]
+#microsoft <- microsoft[microsoft$language =='en' | microsoft$language =='qme' | microsoft$language =='und',]
+nike <- nike[nike$language =='en' | nike$language =='qme' | nike$language =='und',]
+#proctergamble <- proctergamble[proctergamble$language =='en' | proctergamble$language =='qme' | proctergamble$language =='und',]
+#sachs <- sachs[sachs$language =='en' | sachs$language =='qme' | sachs$language =='und',]
+#shell <- shell[shell$language =='en' | shell$language =='qme' | shell$language =='und',]
+#tesla <- tesla[tesla$language =='en' | tesla$language =='qme' | tesla$language =='und',]
+```
+
+```{r}
+nike$date <- as.Date(nike$date)
+nike <- nike[(nike$date >= "2020-01-22")&(nike$date <= "2020-02-19"), ]
+
+```
+
+
+```{r number of words for each dataframe, eval=FALSE, include=FALSE}
+#cut text into words by splitting on spaces and punctuation
+review_words <- nike %>% unnest_tokens(word,tweet,to_lower=FALSE) 
+print("number of words")
+nrow(review_words)
+
+```
+
+```{r nike data cleaning}
+n.tweet <- length(nike$tweet)
+# Convert to basic ASCII text to avoid silly characters
+nike$tweet_clean <- iconv(nike$tweet, to = "ASCII", sub = " ")  
+nike$tweet_clean <- tolower(nike$tweet_clean)
+
+clean.text1 <- function(x)
+{
+  # convert to lower case
+  x = tolower(x)
+  x = gsub("\\bcan't\\b", "can not", x)
+  x = gsub("\\bdon't\\b", "do not", x)
+  x = gsub("\\bdoesn't\\b", "does not", x)
+  x = gsub("\\bi've\\b", 'i have', x)
+  x = gsub("\\bi'll\\b", 'i will', x)
+  x = gsub("\\bdon't\\b", 'do not', x)
+   x = gsub("\\bi 'm\\b", 'i am', x)
+    x = gsub("\\bit's\\b", 'it has', x)
+  x = gsub("\\byou'll\\b", 'you will',x)
+  x = gsub("\\bdidn't\\b", 'did not', x)
+   x = gsub("http://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  x = gsub("https://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  # remove at
+  x = gsub("@\\w+", " ", x)
+  # remove punctuation
+  #x = gsub("[[:punct:]]", " ", x)
+  # remove numbers
+  x = gsub("[[:digit:]]", " ", x)
+  # remove rt
+  x = gsub("RT @[a-z,A-Z]*: "," ",x)
+  #x = gsub("#[a-z,A-Z]*", " ", x)
+  x = gsub("#", "", x)
+  x = gsub("@[a-z,A-Z]*", " ", x)
+  # remove tabs
+  x = gsub("[ |\t]{2,}", " ", x)
+  # remove blank spaces at the beginning
+  x = gsub("^ ", " ", x)
+  # remove blank spaces at the end
+  x = gsub(" $", " ", x)
+  x = gsub('[^[:graph:]]', ' ',x)
+  x = gsub('[[:cntrl:]]', ' ', x)
+  x = gsub('\\d+', ' ', x)
+  x = str_replace_all(x,"[^[:graph:]]", " ")
+   x = gsub('&amp', ' ', x)
+  return(x)
+}
+```
+
+```{r nike}
+#################Bank of America####################
+nike$tweet_clean <- clean.text1(nike$tweet_clean)
+nike$tweet_clean <- gsub('don t', 'do not', nike$tweet_clean)
+nike$tweet_clean <- gsub('wouldn t', 'would not', nike$tweet_clean)
+nike$tweet_clean <- gsub('hasn t', 'has not', nike$tweet_clean)
+nike$tweet_clean <- gsub('doesn t', 'does not', nike$tweet_clean)
+nike$tweet_clean <- gsub('stopnike', 'stop nike', nike$tweet_clean)
+nike$tweet_clean <- gsub('snkrs', 'sneakers', nike$tweet_clean)
+
+idx <- which(nike$tweet_clean == "")
+nike <- nike[nike$tweet_clean != " ",]
+nike$date <- as.Date(nike$date)
+
+```
+
+```{r nike number of word clean dataframe}
+#cut text into words by splitting on spaces and punctuation
+nike_words <- nike %>% unnest_tokens(word,tweet_clean,to_lower=FALSE) 
+print("number of words")
+nrow(nike_words)
+
+#Count the number of times each word occurs
+counts_nike <- count(nike_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts_nike)
+```
+
+```{r nike count without stop words, eval=FALSE, include=FALSE}
+data(stop_words)
+nike_words_nostop <- nike_words %>% 
+                        anti_join(stop_words)
+counts <- count(nike_words_nostop$word)
+print("number of words without stop words")
+sum(counts$freq)
+print("number of unique words")
+nrow(counts)
+```
+
+```{r nike getting an update on the most frequent words after removing stop words, eval=FALSE, include=FALSE}
+counts %>% 
+  mutate(x = reorder(x,freq)) %>% 
+  top_n(20, x) %>%
+  ggplot(aes(x,freq)) +  
+  geom_col() + 
+  labs(x = NULL, y = "Number of occurences") + 
+  coord_flip() + 
+  theme(text = element_text(size = 17)) + 
+  ggtitle("Word Frequency Histogram")
+```
+
+```{r nike creating sentiment dataset for words, eval=FALSE, include=FALSE}
+nike_words <- nike[,] %>%
+  unnest_tokens("tweet_no_stem", output = "word") %>%
+anti_join(stop_words, by = "word") %>%
+  count("word")%>%
+  filter(freq > 100)
+
+nike_words$sentiment <- sentiment(nike_words$word , lexicon::hash_sentiment_huliu)$sentiment
+nike_words <- filter(nike_words, sentiment !=0)
+
+nike_words %>%
+  mutate(freq = ifelse(sentiment <0, -freq, freq))%>%
+  mutate(word=reorder(word,freq))%>%
+  mutate(Sentiment = ifelse(sentiment > 0, "Positive", "Negative"))%>%
+  ggplot(aes(word, freq, fill= Sentiment)) + geom_col() + coord_flip() + labs(y="Contribution to \"total\" sentiment", x= "Word")
+```
+
+```{r}
+nike$tweet_no_stem <- nike$tweet_clean
+nike$tweet_clean = gsub("[[:punct:]]", " ", nike$tweet_clean)
+
+ignorelist = stop_words %>% filter(!word %in% c("no", "not", "never", "nobody", "none", "cannot", "can't"
+                                                , "can", "do", "would", "ever", "except", "ignored", "least"
+                                                , "more", 'non', "none", "nor", "nowhere", "unfortunately", 
+                                                "unlikely", "unless", "useful", "very"))
+                                                
+for (j in 1:nrow(nike)) {
+  words <- nike[j,] %>% 
+           unnest_tokens(word, tweet_no_stem) %>% 
+           anti_join(ignorelist, by="word")
+  nike[j, "tweet_with_no"] <- paste(words[, "word"], collapse = " ")}
+```
+
+```{r sentiment }
+
+nike <- nike[-c(which(str_detect(nike$tweet_no_stem, "giveaway"))),]
+nike <- nike[-c(which(str_detect(nike$tweet_no_stem, "win"))),]
+nike <- nike[-c(which(str_detect(nike$tweet_no_stem, "podcast"))),]
+nike <- nike[-c(which(str_detect(nike$tweet_no_stem, "xboxsweepstakes"))),]
+
+
+mytext1 <- get_sentences(nike$tweet_with_no)
+nike$sent_tweet_nostop <- sentiment_by(mytext1)$ave_sentiment
+#mysentiment <- sentiment_by(mytext, question.weight = 0)
+nike_plot <- setNames(aggregate(nike[,c('sent_tweet_withstop', "sent_tweet_nostop")], by = list(nike$date),FUN = mean),c("date", "sentiment_stop", "sentiment_no_stop"))
+
+nike_subset <- nike_plot
+
+nike_subset$day <- c(1:29)
+
+nike_subset %>%
+  ggplot(aes(x = day, y = sentiment_no_stop)) +
+  geom_line() +
+  geom_smooth(span = 0.2, se = FALSE, color = 'pink')+
+  scale_x_continuous(breaks = (c(1,15,29)),
+                   labels = c("2 weeks prior", "day of tweet", "2 weeks after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 1) +
+  xlab(label = 'Date') +
+  ylab(label = "Sentiment Score") +
+  theme_bw() +
+  ggtitle(label = 'Sentiment Score')
+
+remove(nike_plot)
+
+```
+
+```{r nike subset}
+before_nike <- nike_subset[12:14,]
+after_nike <- nike_subset[16:18,]
+
+t.test(before_nike$sentiment_stop, after_nike$sentiment_stop)
+t.test(before_nike$sentiment_no_stop, after_nike$sentiment_no_stop)
+```
+ 
+```{r nike save data}
+nike_subset <- nike_subset[,c("day", "sentiment_no_stop")]
+names(nike_subset)[2] <- 'sentiment_nike'
+saveRDS(nike_subset , file="sentiment_subset_nike.rds")
+```
+
+```{r Goldman Sachs data upload}
+#bank_of_america <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/bankofamerica copy.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#coca_cola <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/coca_cola_life.csv")
+
+#ford <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/ford.csv")
+
+sachs <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/goldmansachs.csv")
+
+#mcdonalds <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/mcdonalds.csv")
+
+#microsoft <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft.csv")
+
+#microsoft_green <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft_green.csv")
+
+#nike <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike.csv")
+
+#nike1 <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike1.csv")
+
+#proctergamble  <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/proctergamble.csv")
+
+#shell <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/shell.csv")
+
+#tesla <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/tesla.csv")
+```
+
+```{r filter data}
+#bank_of_america <- bank_of_america[,names(bank_of_america) %in% c("date", "time", "tweet", 
+ #                                                                "language", "likes_count", "retweets_count")]
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[,names(boeing) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#coca_cola <- coca_cola[,names(coca_cola) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#ford <- ford[,names(ford) %in% c("date", "time", "tweet", "language", "likes_count",
+#                                "retweets_count")]
+#mcdonalds <- mcdonalds[,names(mcdonalds) %in% c("date", "time", "tweet", 
+#                                                                  "language", "likes_count", "retweets_count")]
+#microsoft <- microsoft[,names(microsoft) %in% c("date", "time", "tweet", 
+#                                                                "language", "likes_count", "retweets_count")]
+#microsoft_green <- microsoft_green[,names(microsoft_green) %in% c("date", "time", "tweet", 
+ #                                                                "language", "likes_count", "retweets_count")]
+#nike <-  nike[,names(nike) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#nike1 <- nike1[,names(nike1) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#proctergamble <- proctergamble[,names(proctergamble) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+sachs <- sachs[,names(sachs) %in% c("date", "time", "tweet", 
+                                                                "language", "likes_count", "retweets_count")]
+#shell <- shell[,names(shell) %in% c("date", "time", "tweet", 
+#                                                                "language", "likes_count", "retweets_count")]
+#tesla <- tesla[,names(tesla) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+```
+
+```{r language}
+#microsoft <- rbind(microsoft, microsoft_green)
+#nike <- rbind(nike1, nike)
+#remove(nike1)
+
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[boeing$language =='en' | boeing$language =='qme' | boeing$language =='und',]
+#coca_cola <- coca_cola[coca_cola$language =='en' | coca_cola$language =='qme' | coca_cola$language =='und',]
+#ford <- ford[ford$language =='en' | ford$language =='qme' | ford$language =='und',]
+# <- mcdonalds[mcdonalds$language =='en' | mcdonalds$language =='qme' | mcdonalds$language =='und',]
+#microsoft <- microsoft[microsoft$language =='en' | microsoft$language =='qme' | microsoft$language =='und',]
+#nike <- nike[nike$language =='en' | nike$language =='qme' | nike$language =='und',]
+#proctergamble <- proctergamble[proctergamble$language =='en' | proctergamble$language =='qme' | proctergamble$language =='und',]
+sachs <- sachs[sachs$language =='en' | sachs$language =='qme' | sachs$language =='und',]
+#shell <- shell[shell$language =='en' | shell$language =='qme' | shell$language =='und',]
+#tesla <- tesla[tesla$language =='en' | tesla$language =='qme' | tesla$language =='und',]
+```
+
+```{r}
+sachs$date <- as.Date(sachs$date)
+sachs <- sachs[(sachs$date >= "2020-05-18")&(sachs$date <= "2020-06-15"), ]
+```
+
+
+```{r number of words for each dataframe}
+#cut text into words by splitting on spaces and punctuation
+review_words <- sachs %>% unnest_tokens(word,tweet,to_lower=FALSE) 
+print("number of words")
+nrow(review_words)
+review_words <- review_words[,6]
+
+#Count the number of times each word occurs
+counts <- count(review_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts)
+```
+
+```{r Goldman Sachs data cleaning}
+n.tweet <- length(sachs$tweet)
+# Convert to basic ASCII text to avoid silly characters
+sachs$tweet_clean <- iconv(sachs$tweet, to = "ASCII", sub = " ")  
+sachs$tweet_clean <- tolower(sachs$tweet_clean)
+
+clean.text1 <- function(x)
+{
+  # convert to lower case
+  x = tolower(x)
+  x = gsub("\\bcan't\\b", "can not", x)
+  x = gsub("\\bdon't\\b", "do not", x)
+  x = gsub("\\bdoesn't\\b", "does not", x)
+  x = gsub("\\bi've\\b", 'i have', x)
+  x = gsub("\\bi'll\\b", 'i will', x)
+  x = gsub("\\bdon't\\b", 'do not', x)
+   x = gsub("\\bi 'm\\b", 'i am', x)
+    x = gsub("\\bit's\\b", 'it has', x)
+  x = gsub("\\byou'll\\b", 'you will',x)
+  x = gsub("\\bdidn't\\b", 'did not', x)
+   x = gsub("http://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  x = gsub("https://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  # remove at
+  x = gsub("@\\w+", " ", x)
+  # remove punctuation
+  #x = gsub("[[:punct:]]", " ", x)
+  # remove numbers
+  x = gsub("[[:digit:]]", " ", x)
+  # remove rt
+  x = gsub("RT @[a-z,A-Z]*: "," ",x)
+  #x = gsub("#[a-z,A-Z]*", " ", x)
+  x = gsub("#", "", x)
+  x = gsub("@[a-z,A-Z]*", " ", x)
+  # remove tabs
+  x = gsub("[ |\t]{2,}", " ", x)
+  # remove blank spaces at the beginning
+  x = gsub("^ ", " ", x)
+  # remove blank spaces at the end
+  x = gsub(" $", " ", x)
+  x = gsub('[^[:graph:]]', ' ',x)
+  x = gsub('[[:cntrl:]]', ' ', x)
+  x = gsub('\\d+', ' ', x)
+  x = str_replace_all(x,"[^[:graph:]]", " ")
+   x = gsub('&amp', ' ', x)
+  return(x)
+}
+```
+
+```{r Goldman Sachs}
+#################Bank of America####################
+sachs$tweet_clean <- clean.text1(sachs$tweet_clean)
+sachs$tweet_clean <- gsub('don t', 'do not', sachs$tweet_clean)
+sachs$tweet_clean <- gsub('wouldn t', 'would not', sachs$tweet_clean)
+sachs$tweet_clean <- gsub('hasn t', 'has not', sachs$tweet_clean)
+sachs$tweet_clean <- gsub('doesn t', 'does not', sachs$tweet_clean)
+
+idx <- which(sachs$tweet_clean == "")
+sachs <- sachs[sachs$tweet_clean != " ",]
+sachs$date <- as.Date(sachs$date)
+
+```
+
+```{r Goldman Sachs number of word clean dataframe}
+#cut text into words by splitting on spaces and punctuation
+sachs_words <- sachs %>% unnest_tokens(word,tweet_clean,to_lower=FALSE) 
+print("number of words")
+nrow(sachs_words)
+
+#Count the number of times each word occurs
+counts_sachs <- count(sachs_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts_sachs)
+```
+
+```{r Goldman Sachs count without stop words, eval=FALSE, include=FALSE}
+data(stop_words)
+sachs_words_nostop <- sachs_words %>% 
+                        anti_join(stop_words)
+counts <- count(sachs_words_nostop$word)
+print("number of words without stop words")
+sum(counts$freq)
+print("number of unique words")
+nrow(counts)
+```
+
+```{r Goldman Sachs getting an update on the most frequent words after removing stop words, eval=FALSE, include=FALSE}
+counts %>% 
+  mutate(x = reorder(x,freq)) %>% 
+  top_n(20, x) %>%
+  ggplot(aes(x,freq)) +  
+  geom_col() + 
+  labs(x = NULL, y = "Number of occurences") + 
+  coord_flip() + 
+  theme(text = element_text(size = 17)) + 
+  ggtitle("Word Frequency Histogram")
+```
+
+```{r Goldman Sachs creating sentiment dataset for words, eval=FALSE, include=FALSE}
+sachs_words <- sachs[,] %>%
+  unnest_tokens("tweet_no_stem", output = "word") %>%
+anti_join(stop_words, by = "word") %>%
+  count("word")%>%
+  filter(freq > 100)
+
+sachs_words$sentiment <- sentiment(sachs_words$word , lexicon::hash_sentiment_huliu)$sentiment
+sachs_words <- filter(sachs_words, sentiment !=0)
+
+sachs_words %>%
+  mutate(freq = ifelse(sentiment <0, -freq, freq))%>%
+  mutate(word=reorder(word,freq))%>%
+  mutate(Sentiment = ifelse(sentiment > 0, "Positive", "Negative"))%>%
+  ggplot(aes(word, freq, fill= Sentiment)) + geom_col() + coord_flip() + labs(y="Contribution to \"total\" sentiment", x= "Word")
+```
+
+```{r}
+sachs$tweet_no_stem <- sachs$tweet_clean
+sachs$tweet_clean = gsub("[[:punct:]]", " ", sachs$tweet_clean)
+
+ignorelist = stop_words %>% filter(!word %in% c("no", "not", "never", "nobody", "none", "cannot", "can't"
+                                                , "can", "do", "would", "ever", "except", "ignored", "least"
+                                                , "more", 'non', "none", "nor", "nowhere", "unfortunately", 
+                                                "unlikely", "unless", "useful", "very"))
+                                                
+for (j in 1:nrow(sachs)) {
+  words <- sachs[j,] %>% 
+           unnest_tokens(word, tweet_no_stem) %>% 
+           anti_join(ignorelist, by="word")
+  sachs[j, "tweet_with_no"] <- paste(words[, "word"], collapse = " ")}
+```
+
+```{r sentiment }
+
+sachs <- sachs[-c(which(str_detect(sachs$tweet_no_stem, "giveaway"))),]
+sachs <- sachs[-c(which(str_detect(sachs$tweet_no_stem, "win"))),]
+sachs <- sachs[-c(which(str_detect(sachs$tweet_no_stem, "podcast"))),]
+sachs <- sachs[-c(which(str_detect(sachs$tweet_no_stem, "bitcoin"))),]
+
+mytext1 <- get_sentences(sachs$tweet_with_no)
+sachs$sent_tweet_nostop <- sentiment_by(mytext1)$ave_sentiment
+#mysentiment <- sentiment_by(mytext, question.weight = 0)
+sachs_plot <- setNames(aggregate(sachs[,c('sent_tweet_withstop', "sent_tweet_nostop")], by = list(sachs$date),FUN = mean),c("date", "sentiment_stop", "sentiment_no_stop"))
+
+sachs_subset <- sachs_plot
+
+sachs_subset$day <- c(1:29)
+
+sachs_subset %>%
+  ggplot(aes(x = day, y = sentiment_no_stop)) +
+  geom_line() +
+  geom_smooth(span = 0.2, se = FALSE, color = 'pink')+
+  scale_x_continuous(breaks = (c(1,15,29)),
+                   labels = c("2 weeks prior", "day of tweet", "2 weeks after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 1) +
+  xlab(label = 'Date') +
+  ylab(label = "Sentiment Score") +
+  theme_bw() +
+  ggtitle(label = 'Sentiment Score')
+
+remove(sachs_plot)
+
+```
+
+```{r}
+before_sachs <- sachs_subset[12:14,]
+after_sachs <- sachs_subset[16:18,]
+
+t.test(before_sachs$sentiment_no_stop, after_sachs$sentiment_no_stop)
+```
+ 
+```{r Goldman Sachs save data}
+sachs_subset <- sachs_subset[,c("day", "sentiment_no_stop")]
+names(sachs_subset)[2] <- 'sentiment_sachs'
+saveRDS(sachs_subset , file="sentiment_subset_sachs.rds")
+```
+
+```{r tesla data upload}
+#bank_of_america <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/bankofamerica copy.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#coca_cola <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/coca_cola_life.csv")
+
+#ford <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/ford.csv")
+
+#sachs <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/goldmansachs.csv")
+
+#mcdonalds <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/mcdonalds.csv")
+
+#microsoft <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft.csv")
+
+#microsoft_green <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft_green.csv")
+
+#nike <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike.csv")
+
+#nike1 <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike1.csv")
+
+#proctergamble  <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/proctergamble.csv")
+
+#shell <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/shell.csv")
+
+tesla <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/tesla.csv")
+```
+
+```{r filter data}
+#bank_of_america <- bank_of_america[,names(bank_of_america) %in% c("date", "time", "tweet", 
+ #                                                                "language", "likes_count", "retweets_count")]
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[,names(boeing) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#coca_cola <- coca_cola[,names(coca_cola) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#ford <- ford[,names(ford) %in% c("date", "time", "tweet", "language", "likes_count",
+#                                "retweets_count")]
+#mcdonalds <- mcdonalds[,names(mcdonalds) %in% c("date", "time", "tweet", 
+#                                                                  "language", "likes_count", "retweets_count")]
+#microsoft <- microsoft[,names(microsoft) %in% c("date", "time", "tweet", 
+#                                                                "language", "likes_count", "retweets_count")]
+#microsoft_green <- microsoft_green[,names(microsoft_green) %in% c("date", "time", "tweet", 
+ #                                                                "language", "likes_count", "retweets_count")]
+#nike <-  nike[,names(nike) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#nike1 <- nike1[,names(nike1) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#proctergamble <- proctergamble[,names(proctergamble) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#sachs <- sachs[,names(sachs) %in% c("date", "time", "tweet", 
+ #                                                               "language", "likes_count", "retweets_count")]
+#shell <- shell[,names(shell) %in% c("date", "time", "tweet", 
+#                                                                "language", "likes_count", "retweets_count")]
+tesla <- tesla[,names(tesla) %in% c("date", "time", "tweet", 
+                                                                 "language", "likes_count", "retweets_count")]
+```
+
+```{r language}
+#microsoft <- rbind(microsoft, microsoft_green)
+#nike <- rbind(nike1, nike)
+#remove(nike1)
+
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[boeing$language =='en' | boeing$language =='qme' | boeing$language =='und',]
+#coca_cola <- coca_cola[coca_cola$language =='en' | coca_cola$language =='qme' | coca_cola$language =='und',]
+#ford <- ford[ford$language =='en' | ford$language =='qme' | ford$language =='und',]
+# <- mcdonalds[mcdonalds$language =='en' | mcdonalds$language =='qme' | mcdonalds$language =='und',]
+#microsoft <- microsoft[microsoft$language =='en' | microsoft$language =='qme' | microsoft$language =='und',]
+#nike <- nike[nike$language =='en' | nike$language =='qme' | nike$language =='und',]
+#proctergamble <- proctergamble[proctergamble$language =='en' | proctergamble$language =='qme' | proctergamble$language =='und',]
+#sachs <- sachs[sachs$language =='en' | sachs$language =='qme' | sachs$language =='und',]
+#shell <- shell[shell$language =='en' | shell$language =='qme' | shell$language =='und',]
+tesla <- tesla[tesla$language =='en' | tesla$language =='qme' | tesla$language =='und',]
+```
+
+```{r TESLA DATE }
+tesla$date <- as.Date(tesla$date)
+tesla <- tesla[(tesla$date >= "2019-05-18")&(tesla$date <= "2019-06-15"), ]
+```
+
+
+```{r number of words for each dataframe}
+#cut text into words by splitting on spaces and punctuation
+review_words <- tesla %>% unnest_tokens(word,tweet,to_lower=FALSE) 
+print("number of words")
+nrow(review_words)
+review_words <- review_words[,6]
+
+#Count the number of times each word occurs
+counts <- count(review_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts)
+```
+
+```{r TESLA data cleaning}
+n.tweet <- length(tesla$tweet)
+# Convert to basic ASCII text to avoid silly characters
+tesla$tweet_clean <- iconv(tesla$tweet, to = "ASCII", sub = " ")  
+tesla$tweet_clean <- tolower(tesla$tweet_clean)
+
+clean.text1 <- function(x)
+{
+  # convert to lower case
+  x = tolower(x)
+  x = gsub("\\bcan't\\b", "can not", x)
+  x = gsub("\\bdon't\\b", "do not", x)
+  x = gsub("\\bdoesn't\\b", "does not", x)
+  x = gsub("\\bi've\\b", 'i have', x)
+  x = gsub("\\bi'll\\b", 'i will', x)
+  x = gsub("\\bdon't\\b", 'do not', x)
+   x = gsub("\\bi 'm\\b", 'i am', x)
+    x = gsub("\\bit's\\b", 'it has', x)
+  x = gsub("\\byou'll\\b", 'you will',x)
+  x = gsub("\\bdidn't\\b", 'did not', x)
+   x = gsub("http://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  x = gsub("https://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  # remove at
+  x = gsub("@\\w+", " ", x)
+  # remove punctuation
+  #x = gsub("[[:punct:]]", " ", x)
+  # remove numbers
+  x = gsub("[[:digit:]]", " ", x)
+  # remove rt
+  x = gsub("RT @[a-z,A-Z]*: "," ",x)
+  #x = gsub("#[a-z,A-Z]*", " ", x)
+  x = gsub("#", "", x)
+  x = gsub("@[a-z,A-Z]*", " ", x)
+  # remove tabs
+  x = gsub("[ |\t]{2,}", " ", x)
+  # remove blank spaces at the beginning
+  x = gsub("^ ", " ", x)
+  # remove blank spaces at the end
+  x = gsub(" $", " ", x)
+  x = gsub('[^[:graph:]]', ' ',x)
+  x = gsub('[[:cntrl:]]', ' ', x)
+  x = gsub('\\d+', ' ', x)
+  x = str_replace_all(x,"[^[:graph:]]", " ")
+   x = gsub('&amp', ' ', x)
+  return(x)
+}
+```
+
+```{r TESLA}
+#################Bank of America####################
+tesla$tweet_clean <- clean.text1(tesla$tweet_clean)
+tesla$tweet_clean <- gsub('don t', 'do not', tesla$tweet_clean)
+tesla$tweet_clean <- gsub('wouldn t', 'would not', tesla$tweet_clean)
+tesla$tweet_clean <- gsub('hasn t', 'has not', tesla$tweet_clean)
+tesla$tweet_clean <- gsub('doesn t', 'does not', tesla$tweet_clean)
+
+idx <- which(tesla$tweet_clean == "")
+tesla <- tesla[tesla$tweet_clean != " ",]
+tesla$date <- as.Date(tesla$date)
+
+```
+
+```{r TESLA number of word clean dataframe}
+#cut text into words by splitting on spaces and punctuation
+tesla_words <- tesla %>% unnest_tokens(word,tweet_clean,to_lower=FALSE) 
+print("number of words")
+nrow(tesla_words)
+
+#Count the number of times each word occurs
+counts_tesla <- count(tesla_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts_tesla)
+```
+
+```{r TESLA count without stop words, eval=FALSE, include=FALSE}
+data(stop_words)
+tesla_words_nostop <- tesla_words %>% 
+                        anti_join(stop_words)
+counts <- count(tesla_words_nostop$word)
+print("number of words without stop words")
+sum(counts$freq)
+print("number of unique words")
+nrow(counts)
+```
+
+```{r TESLA getting an update on the most frequent words after removing stop words, eval=FALSE, include=FALSE}
+counts %>% 
+  mutate(x = reorder(x,freq)) %>% 
+  top_n(20, x) %>%
+  ggplot(aes(x,freq)) +  
+  geom_col() + 
+  labs(x = NULL, y = "Number of occurences") + 
+  coord_flip() + 
+  theme(text = element_text(size = 17)) + 
+  ggtitle("Word Frequency Histogram")
+```
+
+```{r TESLA creating sentiment dataset for words, eval=FALSE, include=FALSE}
+tesla_words <- tesla[,] %>%
+  unnest_tokens("tweet_no_stem", output = "word") %>%
+anti_join(stop_words, by = "word") %>%
+  count("word")%>%
+  filter(freq > 100)
+
+tesla_words$sentiment <- sentiment(tesla_words$word , lexicon::hash_sentiment_huliu)$sentiment
+tesla_words <- filter(tesla_words, sentiment !=0)
+
+tesla_words %>%
+  mutate(freq = ifelse(sentiment <0, -freq, freq))%>%
+  mutate(word=reorder(word,freq))%>%
+  mutate(Sentiment = ifelse(sentiment > 0, "Positive", "Negative"))%>%
+  ggplot(aes(word, freq, fill= Sentiment)) + geom_col() + coord_flip() + labs(y="Contribution to \"total\" sentiment", x= "Word")
+```
+
+```{r}
+tesla$tweet_no_stem <- tesla$tweet_clean
+tesla$tweet_clean = gsub("[[:punct:]]", " ", tesla$tweet_clean)
+
+ignorelist = stop_words %>% filter(!word %in% c("no", "not", "never", "nobody", "none", "cannot", "can't"
+                                                , "can", "do", "would", "ever", "except", "ignored", "least"
+                                                , "more", 'non', "none", "nor", "nowhere", "unfortunately", 
+                                                "unlikely", "unless", "useful", "very"))
+                                                
+for (j in 1:nrow(tesla)) {
+  words <- tesla[j,] %>% 
+           unnest_tokens(word, tweet_no_stem) %>% 
+           anti_join(ignorelist, by="word")
+  tesla[j, "tweet_with_no"] <- paste(words[, "word"], collapse = " ")}
+```
+
+```{r sentiment }
+tesla1 <- tesla
+tesla <- tesla[-c(which(str_detect(tesla$tweet_no_stem, "giveaway"))),]
+tesla <- tesla[-c(which(str_detect(tesla$tweet_no_stem, "win"))),]
+tesla <- tesla[-c(which(str_detect(tesla$tweet_no_stem, "podcast"))),]
+tesla <- tesla[-c(which(str_detect(tesla$tweet_no_stem, "bitcoin"))),]
+
+
+mytext1 <- get_sentences(tesla$tweet_with_no)
+tesla$sent_tweet_nostop <- sentiment_by(mytext1)$ave_sentiment
+#mysentiment <- sentiment_by(mytext, question.weight = 0)
+tesla_plot <- setNames(aggregate(tesla[,c('sent_tweet_withstop', "sent_tweet_nostop")], by = list(tesla$date),FUN = mean),c("date", "sentiment_stop", "sentiment_no_stop"))
+
+tesla_subset <- tesla_plot
+
+tesla_subset$day <- c(1:29)
+
+tesla_subset %>%
+  ggplot(aes(x = day, y = sentiment_no_stop)) +
+  geom_line() +
+  geom_smooth(span = 0.2, se = FALSE, color = 'pink')+
+  scale_x_continuous(breaks = (c(1,15,29)),
+                   labels = c("2 weeks prior", "day of tweet", "2 weeks after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 1) +
+  xlab(label = 'Date') +
+  ylab(label = "Sentiment Score") +
+  theme_bw() +
+  ggtitle(label = 'Sentiment Score')
+
+remove(tesla_plot)
+
+```
+
+```{r tesla subsetting}
+before_tesla <- tesla_subset[12:14,]
+after_tesla <- tesla_subset[16:18,]
+t.test(before_tesla$sentiment_no_stop, after_tesla$sentiment_no_stop)
+```
+ 
+```{r save data}
+tesla_subset <- tesla_subset[,c("day", "sentiment_no_stop")]
+names(tesla_subset)[2] <- 'sentiment_tesla'
+saveRDS(tesla_subset , file="sentiment_subset_tesla.rds")
+saveRDS(tesla, file='tesla_sentiment_full.rds')
+```
+
+
+```{r MC DONALDS data upload}
+#bank_of_america <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/bankofamerica copy.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#boeing <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/boeing.csv")
+
+#coca_cola <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/coca_cola_life.csv")
+
+#ford <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/ford.csv")
+
+#sachs <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/goldmansachs.csv")
+
+mcdonalds <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/mcdonalds.csv")
+
+#microsoft <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft.csv")
+
+#microsoft_green <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/microsoft_green.csv")
+
+#nike <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike.csv")
+
+#nike1 <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/nike1.csv")
+
+#proctergamble  <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/proctergamble.csv")
+
+#shell <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/shell.csv")
+
+#tesla <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/wetransfer_scraping_2022-06-14_2001/tesla.csv")
+```
+
+```{r filter data}
+#bank_of_america <- bank_of_america[,names(bank_of_america) %in% c("date", "time", "tweet", 
+ #                                                                "language", "likes_count", "retweets_count")]
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[,names(boeing) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#coca_cola <- coca_cola[,names(coca_cola) %in% c("date", "time", "tweet", 
+#                                                                 "language", "likes_count", "retweets_count")]
+#ford <- ford[,names(ford) %in% c("date", "time", "tweet", "language", "likes_count",
+#                                "retweets_count")]
+mcdonalds <- mcdonalds[,names(mcdonalds) %in% c("date", "time", "tweet", 
+                                                                  "language", "likes_count", "retweets_count")]
+#microsoft <- microsoft[,names(microsoft) %in% c("date", "time", "tweet", 
+#                                                                "language", "likes_count", "retweets_count")]
+#microsoft_green <- microsoft_green[,names(microsoft_green) %in% c("date", "time", "tweet", 
+ #                                                                "language", "likes_count", "retweets_count")]
+#nike <-  nike[,names(nike) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#nike1 <- nike1[,names(nike1) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#proctergamble <- proctergamble[,names(proctergamble) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+#sachs <- sachs[,names(sachs) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+#shell <- shell[,names(shell) %in% c("date", "time", "tweet", 
+  #                                                                "language", "likes_count", "retweets_count")]
+#tesla <- tesla[,names(tesla) %in% c("date", "time", "tweet", 
+ #                                                                 "language", "likes_count", "retweets_count")]
+```
+
+```{r language}
+#microsoft <- rbind(microsoft, microsoft_green)
+#nike <- rbind(nike1, nike)
+#remove(microsoft_green, nike1)
+
+#bank_of_america <- bank_of_america[bank_of_america$language =='en' | bank_of_america$language =='qme' | bank_of_america$language =='und',]
+#boeing <- boeing[boeing$language =='en' | boeing$language =='qme' | boeing$language =='und',]
+#coca_cola <- coca_cola[coca_cola$language =='en' | coca_cola$language =='qme' | coca_cola$language =='und',]
+#ford <- ford[ford$language =='en' | ford$language =='qme' | ford$language =='und',]
+mcdonalds <- mcdonalds[mcdonalds$language =='en' | mcdonalds$language =='qme' | mcdonalds$language =='und',]
+#microsoft <- microsoft[microsoft$language =='en' | microsoft$language =='qme' | microsoft$language =='und',]
+#nike <- nike[nike$language =='en' | nike$language =='qme' | nike$language =='und',]
+#proctergamble <- proctergamble[proctergamble$language =='en' | proctergamble$language =='qme' | proctergamble$language =='und',]
+#sachs <- sachs[sachs$language =='en' | sachs$language =='qme' | sachs$language =='und',]
+#shell <- shell[shell$language =='en' | shell$language =='qme' | shell$language =='und',]
+#tesla <- tesla[tesla$language =='en' | tesla$language =='qme' | tesla$language =='und',]
+```
+
+```{r}
+mcdonalds$date <- as.Date(mcdonalds$date)
+mcdonalds <- mcdonalds[(mcdonalds$date >= "2019-04-09")&(mcdonalds$date <= "2019-05-07"), ]
+```
+
+
+```{r number of words for each dataframe, eval=FALSE, include=FALSE}
+#cut text into words by splitting on spaces and punctuation
+review_words <- mcdonalds %>% unnest_tokens(word,tweet,to_lower=FALSE) 
+print("number of words")
+nrow(review_words)
+review_words <- review_words[,6]
+
+#Count the number of times each word occurs
+counts <- count(review_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts)
+```
+
+```{r mc donalds data cleaning}
+n.tweet <- length(mcdonalds$tweet)
+# Convert to basic ASCII text to avoid silly characters
+mcdonalds$tweet_clean <- iconv(mcdonalds$tweet, to = "ASCII", sub = " ")  
+mcdonalds$tweet_clean <- tolower(mcdonalds$tweet_clean)
+
+clean.text1 <- function(x)
+{
+  # convert to lower case
+  x = tolower(x)
+  x = gsub("\\bcan't\\b", "can not", x)
+  x = gsub("\\bdon't\\b", "do not", x)
+  x = gsub("\\bdoesn't\\b", "does not", x)
+  x = gsub("\\bi've\\b", 'i have', x)
+  x = gsub("\\bi'll\\b", 'i will', x)
+  x = gsub("\\bdon't\\b", 'do not', x)
+   x = gsub("\\bi 'm\\b", 'i am', x)
+    x = gsub("\\bit's\\b", 'it has', x)
+  x = gsub("\\byou'll\\b", 'you will',x)
+  x = gsub("\\bdidn't\\b", 'did not', x)
+   x = gsub("http://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  x = gsub("https://t.co/[a-z,A-Z,0-9]*{8}", " ", x)
+  # remove at
+  x = gsub("@\\w+", " ", x)
+  # remove punctuation
+  #x = gsub("[[:punct:]]", " ", x)
+  # remove numbers
+  x = gsub("[[:digit:]]", " ", x)
+  # remove rt
+  x = gsub("RT @[a-z,A-Z]*: "," ",x)
+  #x = gsub("#[a-z,A-Z]*", " ", x)
+  x = gsub("#", "", x)
+  x = gsub("@[a-z,A-Z]*", " ", x)
+  # remove tabs
+  x = gsub("[ |\t]{2,}", " ", x)
+  # remove blank spaces at the beginning
+  x = gsub("^ ", " ", x)
+  # remove blank spaces at the end
+  x = gsub(" $", " ", x)
+  x = gsub('[^[:graph:]]', ' ',x)
+  x = gsub('[[:cntrl:]]', ' ', x)
+  x = gsub('\\d+', ' ', x)
+  x = str_replace_all(x,"[^[:graph:]]", " ")
+   x = gsub('&amp', ' ', x)
+  return(x)
+}
+```
+
+```{r mc donalds}
+#################Bank of America####################
+mcdonalds$tweet_clean <- clean.text1(mcdonalds$tweet_clean)
+mcdonalds$tweet_clean <- gsub('don t', 'do not', mcdonalds$tweet_clean)
+mcdonalds$tweet_clean <- gsub('wouldn t', 'would not', mcdonalds$tweet_clean)
+mcdonalds$tweet_clean <- gsub('imnotlovinit', 'I am not loving it', mcdonalds$tweet_clean)
+mcdonalds$tweet_clean <- gsub('mcdonaldscruelty', 'cruelty', mcdonalds$tweet_clean)
+mcdonalds$tweet_clean <- gsub('hasn t', 'has not', mcdonalds$tweet_clean)
+mcdonalds$tweet_clean <- gsub('mcchickencruelty', 'cruelty', mcdonalds$tweet_clean)
+mcdonalds$tweet_clean <- gsub('doesn t', 'does not', mcdonalds$tweet_clean)
+
+idx <- which(mcdonalds$tweet_clean == "")
+mcdonalds <- mcdonalds[mcdonalds$tweet_clean != " ",]
+mcdonalds$date <- as.Date(mcdonalds$date)
+
+```
+
+```{r mc donalds number of word clean dataframe}
+#cut text into words by splitting on spaces and punctuation
+mcdonalds_words <- mcdonalds %>% unnest_tokens(word,tweet_clean,to_lower=FALSE) 
+print("number of words")
+nrow(mcdonalds_words)
+
+#Count the number of times each word occurs
+counts_mcdonalds <- count(mcdonalds_words$word) # sort = TRUE for sorting in descending order of n. 
+# For questions about a function type ?fun in the console. For example ?count
+print("number of unique words")
+nrow(counts_mcdonalds)
+```
+
+```{r mc donalds count without stop words, eval=FALSE, include=FALSE}
+data(stop_words)
+mcdonalds_words_nostop <- mcdonalds_words %>% 
+                        anti_join(stop_words)
+counts <- count(mcdonalds_words_nostop$word)
+print("number of words without stop words")
+sum(counts$freq)
+print("number of unique words")
+nrow(counts)
+```
+
+```{r mc donalds getting an update on the most frequent words after removing stop words, eval=FALSE, include=FALSE}
+counts %>% 
+  mutate(x = reorder(x,freq)) %>% 
+  top_n(20, x) %>%
+  ggplot(aes(x,freq)) +  
+  geom_col() + 
+  labs(x = NULL, y = "Number of occurences") + 
+  coord_flip() + 
+  theme(text = element_text(size = 17)) + 
+  ggtitle("Word Frequency Histogram")
+```
+
+```{r mc donalds creating sentiment dataset for words, eval=FALSE, include=FALSE}
+mcdonalds_words <- mcdonalds[,] %>%
+  unnest_tokens("tweet_no_stem", output = "word") %>%
+anti_join(stop_words, by = "word") %>%
+  count("word")%>%
+  filter(freq > 100)
+
+mcdonalds_words$sentiment <- sentiment(mcdonalds_words$word , lexicon::hash_sentiment_huliu)$sentiment
+mcdonalds_words <- filter(mcdonalds_words, sentiment !=0)
+
+mcdonalds_words %>%
+  mutate(freq = ifelse(sentiment <0, -freq, freq))%>%
+  mutate(word=reorder(word,freq))%>%
+  mutate(Sentiment = ifelse(sentiment > 0, "Positive", "Negative"))%>%
+  ggplot(aes(word, freq, fill= Sentiment)) + geom_col() + coord_flip() + labs(y="Contribution to \"total\" sentiment", x= "Word")
+```
+
+```{r}
+mcdonalds$tweet_no_stem <- mcdonalds$tweet_clean
+mcdonalds$tweet_clean = gsub("[[:punct:]]", " ", mcdonalds$tweet_clean)
+
+ignorelist = stop_words %>% filter(!word %in% c("no", "not", "never", "nobody", "none", "cannot", "can't"
+                                                , "can", "do", "would", "ever", "except", "ignored", "least"
+                                                , "more", 'non', "none", "nor", "nowhere", "unfortunately", 
+                                                "unlikely", "unless", "useful", "very"))
+                                                
+for (j in 1:nrow(mcdonalds)) {
+  words <- mcdonalds[j,] %>% 
+           unnest_tokens(word, tweet_no_stem) %>% 
+           anti_join(ignorelist, by="word")
+  mcdonalds[j, "tweet_with_no"] <- paste(words[, "word"], collapse = " ")}
+```
+
+```{r sentiment }
+
+#mcdonalds <- mcdonalds[-c(which(str_detect(mcdonalds$tweet_no_stem, "giveaway"))),]
+mcdonalds <- mcdonalds[-c(which(str_detect(mcdonalds$tweet_no_stem, "win"))),]
+mcdonalds <- mcdonalds[-c(which(str_detect(mcdonalds$tweet_no_stem, "podcast"))),]
+
+mytext1 <- get_sentences(mcdonalds$tweet_with_no)
+mcdonalds$sent_tweet_nostop <- sentiment_by(mytext1)$ave_sentiment
+#mysentiment <- sentiment_by(mytext, question.weight = 0)
+mcdonalds_plot <- setNames(aggregate(mcdonalds[,c('sent_tweet_withstop', "sent_tweet_nostop")], by = list(mcdonalds$date),FUN = mean),c("date", "sentiment_stop", "sentiment_no_stop"))
+
+mcdonalds_subset <- mcdonalds_plot
+
+mcdonalds_subset$day <- c(1:29)
+
+mcdonalds_subset %>%
+  ggplot(aes(x = day, y = sentiment_no_stop)) +
+  geom_line() +
+  geom_smooth(span = 0.2, se = FALSE, color = 'pink')+
+  scale_x_continuous(breaks = (c(1,15,29)),
+                   labels = c("2 weeks prior", "day of tweet", "2 weeks after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 1) +
+  xlab(label = 'Date') +
+  ylab(label = "Sentiment Score") +
+  theme_bw() +
+  ggtitle(label = 'Sentiment Score')
+
+remove(mcdonalds_plot)
+saveRDS(mcdonalds, 'mcdonalds_fullsentiment.rds')
+```
+
+```{r mc donalds}
+before_mcdonalds <- mcdonalds_subset[12:14,]
+after_mcdonalds <- mcdonalds_subset[16:18,]
+
+t.test(before_mcdonalds$sentiment_stop, after_mcdonalds$sentiment_stop)
+t.test(before_mcdonalds$sentiment_no_stop, after_mcdonalds$sentiment_no_stop)
+```
+ 
+```{r save data mc donalds}
+mcdonalds_subset <- mcdonalds_subset[,c("day", "sentiment_no_stop")]
+names(mcdonalds_subset)[2] <- 'sentiment_mcdonalds'
+saveRDS(mcdonalds_subset , file="sentiment_subset_mcdonalds.rds")
+```

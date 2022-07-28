@@ -1,0 +1,676 @@
+---
+title: "Final Code Thesis"
+output: html_document
+date: '2022-07-02'
+---
+
+```{r install packages}
+knitr::opts_chunk$set(
+	message = FALSE,
+	warning = FALSE,
+	include = FALSE
+)
+pacman::p_load(readr, readxl, ggplot2, dplyr, plyr, stargazer, caret, AER, plm, knitr, broom, caTools, car, quantmod, MASS, corrplot, estimatr, sjPlot, sjmisc, tidytext, ROAuth, hms, lubridate, tm, wordcloud, igraph,networkD3, stringr, ggeasy, plotly, magrittr, tidyverse, widyr, SnowballC, stringi, ggrepel, syuzhet, sentimentr, RColorBrewer, tidyr, Hmisc)
+
+model_df <- readRDS("clean_dataset_thesis.rds")
+marketvalue <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/marketvalue.csv")
+```
+
+```{r transitioning to logs and checking outliers etc}
+
+model_df$log_tobin_q <- log(model_df$tobin_q)
+
+#DISCLSOURE SCORE 
+hist(log(model_df$esg_discl))
+model_df$log_discl <- log(model_df$esg_discl)
+outliers <- boxplot(model_df$log_discl, plot=FALSE)$out
+boxplot(model_df$log_discl)
+#summary(model_df$log_discl)
+#model_df <- model_df[-which(model_df$esg_discl %in% outliers),]
+
+##ESG SCORE 
+model_df$log_esg_score <- log(model_df$esg_score)
+boxplot(model_df$esg_score)
+hist(model_df$esg_score)
+
+#env SCORE 
+summary(model_df$ENSCORE)
+model_df$log_ENSCORE <- log(model_df$ENSCORE + 1)
+summary(model_df$log_ENSCORE)
+hist(model_df$log_ENSCORE)
+outliers <- boxplot(model_df$log_ENSCORE, plot=FALSE)$out
+#model_df <- model_df[-which(model_df$ENSCORE %in% outliers),]
+
+####BETA####
+model_df$log_beta <- log(model_df$beta + 4)
+#outliers <- boxplot(model_df$log_beta, plot=FALSE)$out
+#model_df <- model_df[-which(model_df$log_beta %in% outliers),]
+
+###TOTAL ASSETS#########
+model_df$log_total_assets <- log(model_df$total_assets)
+
+### ROA ####
+model_df$ROA <- model_df$ROA / 100
+model_df$log_ROA <- log(model_df$ROA + 3.1) 
+model_df <- model_df[-c(which(is.na(model_df$log_ROA))),]
+
+##Leverage##
+model_df <- model_df[-which(model_df$total_debt_to_common_equity < -200000),] #delete extreme outliers
+model_df$log_debt_equity <- model_df$total_debt_to_common_equity + 24000 
+model_df$total_debt_to_common_equity <- model_df$total_debt_to_common_equity /100 #make sure data shows as a percentage
+boxplot(model_df$log_debt_equity)
+outliers <- boxplot(model_df$log_debt_equity, plot=FALSE)$out
+model_df$log_debt_equity <- log(model_df$log_debt_equity)
+plot(density(model_df$log_debt_equity))
+
+###MARKETING EXPENSES
+model_df$log_marketing_exp <- (log(model_df$marketing_exp))
+
+names(model_df)[names(model_df)== "CSR committee"] <- "csr_committee"
+model_df$csr_committee[model_df$csr_committee == 'NULL'] <- "NA"
+model_df$csr_committee <- as.factor(model_df$csr_committee)
+
+model_df$free_float <- model_df$free_float / 100
+model_df$log_free_float <- log(model_df$free_float)
+
+hist(model_df$SOSCORE)
+model_df$log_SOSCORE <- log(model_df$SOSCORE)
+
+hist(model_df$CGSCORE)
+```
+
+
+```{r correlations, eval=FALSE, include=FALSE}
+#correlation coefficients
+cor_df <- model_df[, names(model_df)%in% c("log_tobin_q","log_discl","log_esg_score","log_ENSCORE", "log_SOSCORE","CGSCORE", "log_beta",                    "log_net_sales" ,"log_ROA", "log_debt_equity" ,"log_marketing_exp","log_total_assets", "log_free_float")]
+cor_df <- na.omit(cor_df)
+res <- cor(cor_df, use="pairwise.complete.obs")
+round(res, 2)
+
+#p values
+cor_test <- na.omit(cor_df)
+res2 <- rcorr(as.matrix(cor_test))
+round(res2,2)
+
+#extra plot 
+M <- cor(cor_test)
+corrplot(M, type="upper", order="hclust")
+
+#vif results
+vif_model <- glm(log_tobin_q ~ ., data = cor_df)
+summary(vif_model)
+
+vif_model1 <- plm(log_discl ~ log_esg_score  + log_free_float + csr_committee  + log_total_assets + log_marketing_exp +  log_debt_equity +log_ROA + log_beta + industry, data = model_df, index = c("Years"), model = "within")
+
+
+vif_model2 <- plm(log_tobin_q ~ log_discl + log_esg_score + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + log_ROA + log_beta,
+               data = model_df, 
+               index = c("Years"),
+               model = "within") 
+
+vif1 <- vif(vif_model1)
+vif2 <- vif(vif_model2)
+round(vif2, digits =3)
+```
+
+
+```{r regressions}
+plm_model1 <- plm(log_discl ~ log_esg_score  + log_free_float + csr_committee  + log_total_assets + log_marketing_exp +  log_debt_equity +log_ROA + log_beta + industry, data = model_df, index = c("Years"), model = "within")
+summary(plm_model1)
+model1 <- coeftest(plm_model1, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+model1
+kable(tidy(model1), digits=3, 
+           caption="Model 2")
+round(within_intercept(plm_model1), digits =3)
+
+plm_model2 <- plm(log_tobin_q ~ log_discl + log_esg_score + log_total_assets + log_marketing_exp +  log_debt_equity + log_ROA + log_beta + industry,
+               data = model_df, 
+               index = c("Years"),
+               model = "within") 
+summary(plm_model2)
+model2 <- coeftest(plm_model2, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(model2, digits =3)
+
+
+plm_model3 <- plm(log_tobin_q ~ log_discl*log_esg_score + log_total_assets + log_marketing_exp +  log_debt_equity  + log_ROA + log_beta + industry,
+               data = model_df, 
+               index = c( "Years"),
+               model = "within") 
+summary(plm_model3)
+model3 <- coeftest(plm_model3, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(model3, digits = 3)
+round(within_intercept(plm_model3), digits =3)
+
+plm_model4 <- plm(log_tobin_q ~ log_discl*log_ENSCORE+ log_total_assets + log_marketing_exp + log_debt_equity + log_ROA + log_beta + industry,
+               data = model_df, 
+               index = c( "Years"),
+               model = "within") 
+summary(plm_model4)
+model4 <- coeftest(plm_model4, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(model4, digits = 3)
+round(within_intercept(plm_model4), digits =3)
+
+#####Model 5: social score interaction ########
+plm_model5 <- plm(log_tobin_q ~ log_discl*log_SOSCORE  + log_total_assets + log_marketing_exp +  log_debt_equity + log_ROA + log_beta + industry,
+               data = model_df, 
+               index = c( "Years"),
+               model = "within") 
+summary(plm_model5)
+model5 <- coeftest(plm_model5, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(within_intercept(plm_model5), digits =3)
+round(model5, digits =3)
+
+
+####MODEL 6: Governance score #########
+plm_model6 <- plm(log_tobin_q ~ log_discl*CGSCORE + log_total_assets + log_marketing_exp +  log_debt_equity + log_ROA + log_beta + industry,
+               data = model_df, 
+               index = c( "Years"),
+               model = "within") 
+summary(plm_model6)
+model6 <- coeftest(plm_model6, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(within_intercept(plm_model6), digits =3)
+round(model6, digits =3)
+
+#examples of other interesting regressions to do for specific industries. 
+model_df_test <- model_df[which(model_df$industry == 'Financials'),]
+plm_model_industry <- plm(log_tobin_q ~ log_discl*log_esg_score +  log_beta + log_debt_equity + log_total_assets + log_ROA +  csr_committee + log_free_float + log_marketing_exp,
+               data = model_df_test, 
+               index = c( "Years"),
+               model = "within") 
+summary(plm_model_industry)
+```
+
+
+```{r basic interaction plots}
+test <- model_df
+test$esg_level <- test$esg_score
+test[c(which(test$esg_score < median(test$esg_score))), 'esg_level'] <- 'low'
+test[which(test$esg_level != "low"), 'esg_level'] <- 'high'
+test$esg_level <- factor(test$esg_level)
+
+test$discl_level <- test$esg_discl
+test[which(test$esg_discl < median(test$esg_discl)), 'discl_level'] <- 'low'
+test[which(test$discl_level != "low"), 'discl_level'] <- 'high'
+test$discl_level <- factor(test$discl_level)
+
+test$env_level <- test$ENSCORE
+test[c(which(test$ENSCORE < median(test$ENSCORE))), 'env_level'] <- 'low'
+test[which(test$env_level != "low"), 'env_level'] <- 'high'
+test$env_level <- factor(test$env_level)
+
+test$social_level <- test$SOSCORE
+test[c(which(test$SOSCORE < median(test$SOSCORE))), 'social_level'] <- 'low'
+test[which(test$social_level != "low"), 'social_level'] <- 'high'
+test$social_level <- factor(test$social_level)
+
+test$gov_level <- test$CGSCORE
+test[c(which(test$CGSCORE < median(test$CGSCORE))), 'gov_level'] <- 'low'
+test[which(test$gov_level != "low"), 'gov_level'] <- 'high'
+test$gov_level <- factor(test$gov_level)
+
+levels_model2 <- plm(log_tobin_q ~ discl_level + esg_level + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry,
+               data = test, 
+               index = c("Years"),
+               model = "within") 
+
+l_model2 <- coeftest(levels_model2, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(l_model2, digits =3) 
+round(within_intercept(levels_model2), digits =3)
+
+
+levels_model3 <- plm(log_tobin_q ~ discl_level*esg_level + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry,
+               data = test, 
+               index = c( "Years"),
+               model = "within") 
+summary(levels_model3)
+l_model3 <- coeftest(levels_model3, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(l_model3, digits =3) 
+
+levels_model4 <- plm(log_tobin_q ~ discl_level*env_level + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry,
+               data = test, 
+               index = c( "Years"),
+               model = "within") 
+summary(levels_model4)
+l_model4 <- coeftest(levels_model4, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(l_model4, digits =3) 
+
+#####Model 5: social score interaction ########
+levels_model5 <- plm(log_tobin_q ~ discl_level*social_level + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry,
+               data = test, 
+               index = c( "Years"),
+               model = "within") 
+summary(levels_model5)
+l_model5 <- coeftest(levels_model5, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(l_model5, digits =3) 
+
+
+####MODEL 6: Governance score #########
+levels_model6 <- plm(log_tobin_q ~ discl_level*gov_level + log_total_assets + log_marketing_exp + total_debt_to_common_equity + ROA + log_beta + industry,
+               data = test, 
+               index = c( "Years"),
+               model = "within") 
+l_model6 <- coeftest(levels_model6, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(l_model6, digits =3) 
+round(within_intercept(levels_model6), digits =3)
+
+plot <- test[, names(test)%in% c("discl_level", "esg_discl", "esg_score", "ENSCORE","SOSCORE","log_esg_score","log_ENSCORE", "log_SOSCORE", "CGSCORE", "log_discl",  "log_tobin_q", "log_total_assets" , "log_marketing_exp",  "total_debt_to_common_equity" ,"ROA" , "log_beta", "Years", "industry", "log_ROA")]
+plot <- na.omit(plot)
+plot_lm <-  lm(log_tobin_q ~ discl_level*esg_score + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry + Years, data = plot) 
+plot_lm1 <- lm(log_tobin_q ~ discl_level*ENSCORE + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry + Years, data = plot) 
+plot_lm2 <- lm(log_tobin_q ~ discl_level*SOSCORE + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry + Years, data = plot) 
+plot_lm3 <- lm(log_tobin_q ~ discl_level*CGSCORE + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry + Years, data = plot) 
+
+plot1 <- plot_model(plot_lm, type = 'pred', vcov.type = 'HC3', pred.type = 'fe', ci.lvl = NA, terms = c("esg_score","discl_level"), title = ' ', axis.title = c('ESG performance score',"Tobin's Q"), legend.title = 'ESG disclosure level')  + theme_test()
+plot2 <- plot_model(plot_lm1, type = 'pred', vcov.type = 'HC3', pred.type = 'fe', ci.lvl = NA, terms = c("ENSCORE","discl_level"), title = ' ', axis.title = c('Environmental performance score',"Tobin's Q"), legend.title = 'ESG disclosure level')  + theme_test()
+plot3 <- plot_model(plot_lm2, type = 'pred', vcov.type = 'HC3', pred.type = 'fe', ci.lvl = NA, terms = c("SOSCORE","discl_level"), title = ' ', axis.title = c('Social performance score',"Tobin's Q"), legend.title = 'ESG disclosure level')  + theme_test()
+plot4 <- plot_model(plot_lm3, type = 'pred', vcov.type = 'HC3', pred.type = 'fe', ci.lvl = NA, terms = c("CGSCORE","discl_level"), title = ' ', axis.title = c('Governance performance score',"Tobin's Q"), legend.title = 'ESG disclosure level', fill = 'dose') + theme_test()
+
+library(ggpubr)
+plot_together <- ggarrange(plot1, plot2, plot3, plot4,
+          ncol = 2, nrow = 2, common.legend = TRUE, legend= 'top') + ggtitle("Iris data")
+
+annotate_figure(plot_together, top = text_grob("Interaction between ESG disclosure and ESG, environmental, social and governance scores", 
+               color = "black", face = "bold", size = 12))
+```
+
+
+```{r johnson-neyman plots}
+library(interactions)
+inter_plot1 <-  lm(log_tobin_q ~ log_discl*log_esg_score + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + log_ROA + log_beta + industry + Years, data = plot)
+inter_plot2 <- lm(log_tobin_q ~ log_discl*log_ENSCORE + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry + Years, data = plot) 
+inter_plot3 <- lm(log_tobin_q ~ log_discl*log_SOSCORE + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry + Years, data = plot) 
+inter_plot4 <- lm(log_tobin_q ~ log_discl*CGSCORE + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + ROA + log_beta + industry + Years, data = plot)  
+
+
+sim_slopes(inter_plot1, pred = log_esg_score, modx = log_discl, confint = TRUE, jnplot = TRUE)
+object1 <- johnson_neyman(model = inter_plot1,pred = log_esg_score, modx = log_discl)
+View(object1$cbands)
+jn_1 <- object1$plot + xlab("Ln ESG Disclosure") + ylab("Slope of ESG Perf.") + ggtitle(' ')
+
+object2 <- johnson_neyman(model = inter_plot2,pred = log_ENSCORE, modx = log_discl)
+View(object2$cbands)
+jn_2 <- object$plot +xlab("Ln ESG Disclosure") + ylab("Slope of Env. Perf.") + ggtitle(' ')
+
+
+object3 <- johnson_neyman(model = inter_plot3,pred = log_SOSCORE, modx = log_discl)
+View(object3$cbands)
+jn_3 <- object$plot +xlab("Ln ESG Disclosure") + ylab("Slope of Soc. Perf.")+ ggtitle(' ')
+
+object4 <- johnson_neyman(model = inter_plot4,pred = CGSCORE, modx = log_discl)
+jn_4 <- object$plot +xlab("Ln ESG Disclosure") + ylab("Slope of Govern. Perf.")+ ggtitle(' ')
+object4$bounds
+
+plot_interaction_1 <- interact_plot(inter_plot1, log_esg_score, log_discl, interval = TRUE, color.class = NULL, x.label = 'Ln ESG Performance', y.label = "Tobin's Q", legend.main= "Ln ESG Disclosure", modx.values = c(3.12, 3.55)) + theme_test()
+
+plot_interaction_2 <- interact_plot(inter_plot2, log_ENSCORE, log_discl, interval = TRUE, color.class = NULL, x.label = 'Ln Environmental Performance', y.label = "Tobin's Q", legend.main= "Ln ESG Disclosure", modx.values = c(3.51, 3.697)) + theme_test()
+
+plot_interaction_3 <- interact_plot(inter_plot3, log_SOSCORE, log_discl, interval = TRUE, color.class = NULL, x.label = 'Ln Social Performance', y.label = "Tobin's Q", legend.main= "Ln ESG Disclosure", modx.values = c(2.81, 3.38)) + theme_test()
+
+plot_interaction_4 <- interact_plot(inter_plot4, CGSCORE, log_discl, interval = TRUE, color.class = NULL, x.label = 'Governance Performance', y.label = "Tobin's Q", legend.main= "Ln ESG Disclosure", modx.values = c(2.99, 3.71), line.thickness = 0.8) + theme_test()
+```
+
+
+```{r combining plots for visualization}
+plot_together <- ggarrange(jn_1, jn_2, jn_3, jn_4,
+          ncol = 2, nrow = 2, font.label = list(size = 7), common.legend = TRUE, legend= 'right')
+jn_1
+
+annotate_figure(plot_together, top = text_grob("Johnson-Neyman Plots", 
+               color = "black", face = "bold", size = 12))
+
+plot_together2 <- ggarrange(plot_interaction_1, plot_interaction_2,
+          ncol = 1, nrow = 2, font.label = list(size = 7))
+plot_together3 <- ggarrange(plot_interaction_3, plot_interaction_4,
+          ncol = 1, nrow = 2, font.label = list(size = 7))
+annotate_figure(plot_together2, top = text_grob("The moderating effect of ESG Disclosure on E(SG) Performance and Tobin's Q", 
+               color = "black", face = "bold", size = 12))
+annotate_figure(plot_together3, top = text_grob(expression(paste("The moderating effect of ESG Disclosure on (E)SG Performance and Tobin's Q")), 
+               color = "black", face = "bold", size = 12))
+```
+
+
+```{r ESG strategies}
+test$strategy_ESG <- NA
+test$strategy_ESG <- paste(test$discl_level, test$esg_level, sep = " ")
+factor(test$strategy_ESG)
+
+strat <- plm(log_tobin_q ~ strategy + log_total_assets + log_marketing_exp + total_debt_to_common_equity + ROA + log_beta + industry,
+               data = test, 
+               index = c( "Years"),
+               model = "within") 
+l_strat <- coeftest(strat, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(l_strat, digits =3) 
+round(within_intercept(strat), digits =3)
+
+aov <- aov(log_tobin_q ~ strategy + log_total_assets + log_marketing_exp + total_debt_to_common_equity + ROA + log_beta + industry, data = test)
+summary(aov)
+```
+
+
+```{r additional analyses}
+marketvalue <- read_csv("C:/Users/VT541JT/OneDrive - EY/Desktop/marketvalue.csv")
+
+marketvalue <- marketvalue[,names(marketvalue) %in% c('fyear', 'tic', 'costat', 'mkvalt')]
+marketvalue <- marketvalue[marketvalue$fyear != 2015,]
+marketvalue <- marketvalue[marketvalue$fyear != 2014,]
+
+model_df <- merge(model_df, marketvalue, by.x = c("ticker", "Years"), by.y=c("tic", 'fyear'))
+model_df$log_marketvalue <- log(model_df$mkvalt)
+```
+
+
+
+```{r regressions with market value}
+plm_model2 <- plm(log_marketvalue ~ log_discl + log_esg_score + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + log_ROA + log_beta + industry,
+               data = model_df, 
+               index = c("Years"),
+               model = "within") 
+summary(plm_model2)
+model2 <- coeftest(plm_model2, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(model2, digits =3)
+round(within_intercept(plm_model2), digits =3)
+
+plm_model3 <- plm(log_marketvalue ~ log_discl*log_esg_score + log_total_assets + log_marketing_exp +  total_debt_to_common_equity  + log_ROA + log_beta + industry,
+               data = model_df, 
+               index = c( "Years"),
+               model = "within") 
+summary(plm_model3)
+model3 <- coeftest(plm_model3, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(model3, digits = 3)
+round(within_intercept(plm_model3), digits =3)
+
+plm_model4 <- plm(log_marketvalue ~ log_discl*log_ENSCORE+ log_total_assets + log_marketing_exp + total_debt_to_common_equity + log_ROA + log_beta + industry,
+               data = model_df, 
+               index = c( "Years"),
+               model = "within") 
+summary(plm_model4)
+model4 <- coeftest(plm_model4, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(model4, digits = 3)
+round(within_intercept(plm_model4), digits =3)
+
+#####Model 5: social score interaction ########
+plm_model5 <- plm(log_marketvalue ~ log_discl*log_SOSCORE  + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + log_ROA + log_beta + industry,
+               data = model_df, 
+               index = c( "Years"),
+               model = "within") 
+summary(plm_model5)
+model5 <- coeftest(plm_model5, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(within_intercept(plm_model5), digits =3)
+round(model5, digits =3)
+
+
+####MODEL 6: Governance score #########
+plm_model6 <- plm(log_marketvalue ~ log_discl*CGSCORE + log_total_assets + log_marketing_exp +  total_debt_to_common_equity + log_ROA + log_beta + industry,
+               data = model_df, 
+               index = c( "Years"),
+               model = "within") 
+summary(plm_model6)
+model6 <- coeftest(plm_model6, vcov = function(x) 
+  plm::vcovHC(x, method = 'arellano', cluster = 'group', type = 'HC3'))
+round(within_intercept(plm_model6), digits =3)
+round(model6, digits =3)
+```
+
+
+```{r uploading sentiment of each company}
+microsoft_subset <- readRDS("sentiment_subset_microsoft.rds")
+coca_cola_subset <- readRDS("sentiment_subset_coca_cola.rds")
+boa_subset <- readRDS("C:/Users/VT541JT/OneDrive - Erasmus University Rotterdam/Thesis/Data/Working Directory/sentiment_subset_bank_of_america.rds")
+mcdonalds_subset <- readRDS("sentiment_subset_mcdonalds.rds")
+shell_subset <- readRDS("sentiment_subset_shell.rds")
+nike_subset <- readRDS('sentiment_subset_nike.rds')
+sachs_subset <- readRDS('sentiment_subset_sachs.rds')
+tesla_subset <- readRDS('sentiment_subset_tesla.rds')
+```
+
+```{r}
+sentiment_analysis <- cbind(microsoft_subset, boa_subset, coca_cola_subset, mcdonalds_subset, shell_subset, nike_subset, sachs_subset, tesla_subset)
+names(sentiment_analysis)[1] <- "days"
+names(sentiment_analysis)[names(sentiment_analysis) == 'sentiment_microsoft'] <- "Microsoft"
+names(sentiment_analysis)[names(sentiment_analysis) == "sentiment_coca_cola"] <- "coca_cola"
+names(sentiment_analysis)[names(sentiment_analysis) == 'sentiment_boa'] <- "boa"
+names(sentiment_analysis)[names(sentiment_analysis) == 'sentiment_mcdonalds'] <- "mcdonalds"
+names(sentiment_analysis)[names(sentiment_analysis) == "sentiment_shell"] <- "shell"
+names(sentiment_analysis)[names(sentiment_analysis) == 'sentiment_nike'] <- 'nike'
+names(sentiment_analysis)[names(sentiment_analysis) == 'sentiment_sachs'] <- 'sachs'
+names(sentiment_analysis)[names(sentiment_analysis) == 'sentiment_tesla'] <- 'tesla'
+
+sentiment_analysis <- sentiment_analysis[, names(sentiment_analysis) %in% c("days", "Microsoft", "boa", "coca_cola", "mcdonalds", "shell", "nike", "sachs", "tesla")]
+
+if(!require(devtools)) install.packages("devtools")
+devtools::install_github("kassambara/ggpubr")
+library(ggpubr)
+
+library("reshape2")
+library("jtools")
+```
+
+```{r figures 2 weeks before and after}
+
+sentiment_data1 <- data.frame(x = sentiment_analysis$days, "Bank of America" = sentiment_analysis$boa,"McDonalds" = sentiment_analysis$mcdonalds, "Goldman Sachs" = sentiment_analysis$sachs, "Tesla" = sentiment_analysis$tesla)
+
+sentiment_data2 <- data.frame("Coca-Cola" = sentiment_analysis$coca_cola,  x = sentiment_analysis$days, "Microsoft"= sentiment_analysis$Microsoft,  "Nike" = sentiment_analysis$nike,"Shell" = sentiment_analysis$shell)
+
+data_long1 <- melt(sentiment_data1, id = "x")
+data_long2 <- melt(sentiment_data2, id = "x")
+
+
+fig1<- data_long1 %>%
+  ggplot(aes(x = x, y = value, colour = variable)) +
+  geom_smooth(span = 0.3, se = FALSE)+
+  #geom_smooth(aes(y= BOA), se = FALSE, span = 0.3, color = 'blue') +
+  scale_x_continuous(breaks = (c(1,15,29)),
+                   labels = c("2 weeks prior", "day of tweet", "2 weeks after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 0.5, label = 'Tweet') +
+  xlab(label = ' ') +
+  ylab(label = "Average Sentiment Scores") +
+  theme_classic() +
+  ggtitle(label = 'Sentiment Score 2 weeks before and 2 weeks after CSR-tweet')
+
+fig2 <- data_long2 %>%
+  ggplot(aes(x = x, y = value, colour = variable)) +
+  #geom_line() +
+  geom_smooth(span = 0.3, se = FALSE)+
+  scale_x_continuous(breaks = (c(1,15,29)),
+                   labels = c("2 weeks prior", "day of tweet", "2 weeks after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 0.5) +
+  xlab(label = ' ') +
+  ylab(label = "Average Sentiment Scores") +
+  theme_classic() +
+  ggtitle(label = 'Sentiment Score 2 weeks before and 2 weeks after CSR-tweet')
+```
+
+
+```{r figures defense 2 weeks before and after}
+
+sentiment_data2_coca <- data.frame("Coca-Cola" = sentiment_analysis$coca_cola, "Shell" = sentiment_analysis$shell, x = sentiment_analysis$days)
+data_long2_coca <- melt(sentiment_data2_coca, id = "x")
+
+
+fig2_coca <- data_long2_coca %>%
+  ggplot(aes(x = x, y = value, colour = variable)) +
+  #geom_line() +
+  geom_smooth(span = 0.3, se = FALSE)+
+  scale_x_continuous(breaks = (c(1,15,29)),
+                   labels = c("2 weeks prior", "day of tweet", "2 weeks after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 0.5) +
+  xlab(label = ' ') +
+  ylab(label = "Average Sentiment Scores") +
+  theme_classic() +
+  ggtitle(label = 'Sentiment Score 2 weeks before and 2 weeks after CSR-tweet')
+
+sentiment_data4_coca <- data.frame("Coca Cola" = sentiment_analysis$coca_cola, "Shell" = sentiment_analysis$shell,  x = sentiment_analysis$days)
+
+sentiment_data4_coca <- sentiment_data4_coca[c(13:17),]
+data_long4_coca <- melt(sentiment_data4_coca, id = "x")
+
+par(mfcol=c(1, 2))
+fig4_coca <- data_long4_coca %>%
+  ggplot(aes(x = x, y = value, colour = variable)) +
+  #geom_line() +
+  geom_smooth(se = FALSE)+
+  scale_x_continuous(breaks = (c(13,15,17)),
+                   labels = c("2 days prior", "day of tweet", "2 days after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 0.5) +
+  xlab(label = " ") +
+  ylab(label = "Average Sentiment Scores") +
+  theme_classic() +
+  ggtitle(label = 'Sentiment Score 2 days before and 2 days after CSR-tweet')
+
+figure2_coca <- ggarrange(fig4_coca, fig2_coca,
+          ncol = 1, nrow = 2, common.legend = TRUE, legend= 'bottom')
+figure2_coca
+```
+
+```{r 2 days before and after}
+sentiment_data3 <- data.frame(x = sentiment_analysis$days, "Bank of America" = sentiment_analysis$boa,"McDonalds" = sentiment_analysis$mcdonalds, "Goldman Sachs" = sentiment_analysis$sachs, "Tesla" = sentiment_analysis$tesla)
+
+sentiment_data4 <- data.frame("Coca Cola" = sentiment_analysis$coca_cola,  x = sentiment_analysis$days, "Microsoft"= sentiment_analysis$Microsoft,  "Nike" = sentiment_analysis$nike,"Shell" = sentiment_analysis$shell)
+
+sentiment_data3 <- sentiment_data3[c(13:17),]
+sentiment_data4 <- sentiment_data4[c(13:17),]
+
+data_long3 <- melt(sentiment_data3, id = "x")
+data_long4 <- melt(sentiment_data4, id = "x")
+
+par(mfcol=c(1, 2))
+fig3 <- data_long3 %>%
+  ggplot(aes(x = x, y = value, colour = variable)) +
+  #geom_line()+
+  geom_smooth(se = FALSE)+
+  scale_x_continuous(breaks = (c(13,15,17)),
+                   labels = c("2 days prior", "day of tweet", "2 days after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 0.5) +
+  xlab(label = ' ') +
+  ylab(label = "Average Sentiment Scores") +
+  theme_classic() +
+  ggtitle(label = 'Sentiment Score 2 days before and 2 days after CSR-tweet')
+
+fig4 <- data_long4 %>%
+  ggplot(aes(x = x, y = value, colour = variable)) +
+  #geom_line() +
+  geom_smooth(se = FALSE)+
+  scale_x_continuous(breaks = (c(13,15,17)),
+                   labels = c("2 days prior", "day of tweet", "2 days after"))+
+  geom_vline(xintercept = 15, linetype = "dotted", color = "blue", size = 0.5) +
+  xlab(label = " ") +
+  ylab(label = "Average Sentiment Scores") +
+  theme_classic() +
+  ggtitle(label = 'Sentiment Score 2 days before and 2 days after CSR-tweet')
+
+figure_1 <- ggarrange(fig3, fig1,
+          ncol = 1, nrow = 2, common.legend = TRUE, legend= 'bottom')
+
+figure2 <- ggarrange(fig4, fig2,
+          ncol = 1, nrow = 2, common.legend = TRUE, legend= 'bottom')
+```
+
+```{r test 2 weeks before and after}
+before_microsoft <- microsoft_subset[1:14,]
+after_microsoft <- microsoft_subset[15:28,]
+microsoft_test <- t.test(before_microsoft$sentiment_microsoft, after_microsoft$sentiment_microsoft)
+remove(before_microsoft, after_microsoft)
+microsoft_test
+
+before_coca_cola <- coca_cola_subset[1:14,]
+after_coca_cola <- coca_cola_subset[15:28,]
+coca_cola_test <- t.test(before_coca_cola$sentiment_coca_cola, after_coca_cola$sentiment_coca_cola)
+remove(before_coca_cola, after_coca_cola)
+coca_cola_test
+
+before_bank_of_america <- boa_subset[1:14,]
+after_bank_of_america <- boa_subset[15:28,]
+boa_test <- t.test(before_bank_of_america$sentiment_boa, after_bank_of_america$sentiment_boa)
+remove(before_bank_of_america, after_bank_of_america)
+boa_test
+
+before_mcdonalds <- mcdonalds_subset[1:14,]
+after_mcdonalds <- mcdonalds_subset[15:28,]
+mcdonalds_test <- t.test(before_mcdonalds$sentiment_mcdonalds, after_mcdonalds$sentiment_mcdonalds)
+remove(before_mcdonalds, after_mcdonalds)
+mcdonalds_test
+
+before_shell <- shell_subset[1:14,]
+after_shell <- shell_subset[15:28,]
+shell_test <- t.test(before_shell$sentiment_shell, after_shell$sentiment_shell)
+remove(before_shell, after_shell)
+shell_test
+
+before_nike <- nike_subset[1:14,]
+after_nike <- nike_subset[15:28,]
+nike_test <- t.test(before_nike$sentiment_nike, after_nike$sentiment_nike)
+remove(before_nike, after_nike)
+nike_test
+
+before_sachs <- sachs_subset[1:14,]
+after_sachs <- sachs_subset[15:28,]
+sachs_test <- t.test(before_sachs$sentiment_sachs, after_sachs$sentiment_sachs)
+remove(before_sachs, after_sachs)
+sachs_test
+
+before_tesla <- tesla_subset[1:14,]
+after_tesla <- tesla_subset[15:28,]
+tesla_test <- t.test(before_tesla$sentiment_tesla, after_tesla$sentiment_tesla)
+remove(before_tesla, after_tesla)
+tesla_test
+
+```
+
+
+```{r test 2 days before and 2 days after}
+before_microsoft <- microsoft_subset[13:14,]
+after_microsoft <- microsoft_subset[15:17,]
+microsoft_test1 <- t.test(before_microsoft$sentiment_microsoft, after_microsoft$sentiment_microsoft)
+remove(before_microsoft, after_microsoft)
+
+before_coca_cola <- coca_cola_subset[13:14,]
+after_coca_cola <- coca_cola_subset[15:16,]
+coca_cola_test1 <- t.test(before_coca_cola$sentiment_coca_cola, after_coca_cola$sentiment_coca_cola)
+remove(before_coca_cola, after_coca_cola)
+
+before_bank_of_america <- boa_subset[13:14,]
+after_bank_of_america <- boa_subset[15:17,]
+boa_test1 <- t.test(before_bank_of_america$sentiment_boa, after_bank_of_america$sentiment_boa)
+remove(before_bank_of_america, after_bank_of_america)
+
+before_mcdonalds <- mcdonalds_subset[13:14,]
+after_mcdonalds <- mcdonalds_subset[15:17,]
+mcdonalds_test1 <- t.test(before_mcdonalds$sentiment_mcdonalds, after_mcdonalds$sentiment_mcdonalds)
+remove(before_mcdonalds, after_mcdonalds)
+
+before_shell <- shell_subset[13:14,]
+after_shell <- shell_subset[15:17,]
+shell_test1 <- t.test(before_shell$sentiment_shell, after_shell$sentiment_shell)
+remove(before_shell, after_shell)
+
+before_nike <- nike_subset[13:14,]
+after_nike <- nike_subset[15:17,]
+nike_test1 <- t.test(before_nike$sentiment_nike, after_nike$sentiment_nike)
+remove(before_nike, after_nike)
+
+before_sachs <- sachs_subset[13:14,]
+after_sachs <- sachs_subset[15:17,]
+sachs_test1 <- t.test(before_sachs$sentiment_sachs, after_sachs$sentiment_sachs)
+remove(before_sachs, after_sachs)
+
+before_tesla <- tesla_subset[13:14,]
+after_tesla <- tesla_subset[15:17,]
+tesla_test1 <- t.test(before_tesla$sentiment_tesla, after_tesla$sentiment_tesla)
+remove(before_tesla, after_tesla)
+```
